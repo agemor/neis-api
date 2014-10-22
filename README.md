@@ -57,7 +57,8 @@ school-api
     
 ##출력 결과
 급식의 경우, 
-MenuData[] result = SchoolAPI.getMonthlyMenu(Country.SEOUL, "B100000465", SchoolType.HIGH, 2014, 10);
+
+    MenuData[] result = SchoolAPI.getMonthlyMenu(Country.SEOUL, "B100000465", SchoolType.HIGH, 2014, 10);
 을 실행하게 되면, 서울에 위치한 선덕고등학교의 2014년 10월 급식 식단표를 배열 형태(MenuData[])로 가져오게 됩니다.
 2014년 10월 1일 메뉴: result[0];
 2014년 10월 10일 메뉴: result[9];
@@ -71,7 +72,8 @@ MenuData[] result = SchoolAPI.getMonthlyMenu(Country.SEOUL, "B100000465", School
 급식이 없을 경우 "급식 없음" 이 입력됩니다.
 
 학사 일정의 경우
-ScheduleData[] result = SchoolAPI.getMonthlySchedule(Country.SEOUL, "B100000465", SchoolType.HIGH, 2014, 10);
+
+    ScheduleData[] result = SchoolAPI.getMonthlySchedule(Country.SEOUL, "B100000465", SchoolType.HIGH, 2014, 10);
 2014년 10월 1일의 일정: result[0];
 .. (이하 동일) ...
 
