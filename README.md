@@ -17,7 +17,7 @@ school-api
 
 1. 관할 교육청(String)
     SchoolAPI.Country 를 통해 가능한 목록을 보실 수 있습니다.
-    서울: Country.SEOUL
+    <li>서울: Country.SEOUL
     울산: Country.ULSAN
     전북: Country.JEONBUK
     부산: Country.BUSAN
@@ -33,7 +33,7 @@ school-api
     충북: Country.CHUNGBUK
     제주: Country.JEJU
     대전: Country.DAEJEON
-    충남: Country.CHUNGNAM
+    충남: Country.CHUNGNAM</li>
     
 2. 학교 코드(String)
     나이스(NEIS)에서 각 학교에 부여하는 코드입니다.
