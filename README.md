@@ -83,3 +83,7 @@ school-api
 ##참고
 학교용 앱을 만들다 이런 API를 필요로 하는 분이 많으실 것 같아 제가 직접 만들어 공개하게 되었습니다.
 이 API는 html 파싱 라이브러리인 JSoup이 필요합니다. (www.jsoup.org)
+
+## 제작
+김현준(agemor@naver.com)
+궁금한 점은 언제든지 연락주세요!
