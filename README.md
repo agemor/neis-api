@@ -4,15 +4,16 @@ school-api
 전국 각 시, 도의 교육청 학생서비스 페이지(hes.xxx.go.kr)을 파싱하여 급식 식단표(월간)와 학사 일정(월간)을 간단하게 읽어올 수 있습니다. 
 
 
-[읽어올 수 있는 범위]
+###[읽어올 수 있는 범위]
 교육청에 등록되어있는 전국의 모든 공/사립 교육 기관
 1. 병설유치원
 2. 초등학교
 3. 중학교
 4. 고등학교
 
-[사용 방법]
-SchoolAPI.getMonthlyMenu(관할 교육청, 학교 코드, 학교 종류, 읽어올 해, 읽어올 달)
+###[사용 방법]
+
+    SchoolAPI.getMonthlyMenu(관할 교육청, 학교 코드, 학교 종류, 읽어올 해, 읽어올 달)
 
 1. 관할 교육청(String)
     SchoolAPI.Country 를 통해 가능한 목록을 보실 수 있습니다.
@@ -54,7 +55,7 @@ SchoolAPI.getMonthlyMenu(관할 교육청, 학교 코드, 학교 종류, 읽어�
     데이터를 읽어올 달을 입력합니다.
     
     
-[출력 결과]
+###[출력 결과]
 급식의 경우, 
 MenuData[] result = SchoolAPI.getMonthlyMenu(Country.SEOUL, "B100000465", SchoolType.HIGH, 2014, 10);
 을 실행하게 되면, 서울에 위치한 선덕고등학교의 2014년 10월 급식 식단표를 배열 형태(MenuData[])로 가져오게 됩니다.
@@ -77,6 +78,6 @@ ScheduleData[] result = SchoolAPI.getMonthlySchedule(Country.SEOUL, "B100000465"
 일정을 읽어올 때는 result[날짜-1].schedule 로 쓰면 됩니다.
 
 
-[참고]
+###[참고]
 학교용 앱을 만들다 이런 API를 필요로 하는 분이 많으실 것 같아 제가 직접 만들어 공개하게 되었습니다.
 이 API는 html 파싱 라이브러리인 JSoup이 필요합니다. (www.jsoup.org)
