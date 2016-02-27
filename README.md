@@ -42,31 +42,31 @@ School api = new School(/* 학교 종류 */, /* 관할 지역 */, /* 학교 코�
 
  학교 종류는 `School.Type` 에서 선택할 수 있습니다.
 
-> - 병설유치원: `School.Type.KINDERGARTEN`
-> - 초등학교: `School.Type.ELEMENTARY`
-> - 중학교: `School.Type.MIDDLE`
-> - 고등학교: `School.Type.HIGH`
+- 병설유치원: `School.Type.KINDERGARTEN`
+- 초등학교: `School.Type.ELEMENTARY`
+- 중학교: `School.Type.MIDDLE`
+- 고등학교: `School.Type.HIGH`
 
 
 관할 지역은 `School.Region` 에서 선택할 수 있습니다.
 
-> - 서울특별시: `School.Region.SEOUL`
-> - 인천광역시: `School.Region.INCHEON`
-> - 부산광역시: `School.Region.BUSAN`
-> - 광주광역시: `School.Region.GWANGJU`
-> - 대전광역시: `School.Region.DAEJEON`
-> - 대구광역시: `School.Region.DAEGU`
-> - 세종특별자치시: `School.Region.SEJONG`
-> - 울산광역시: `School.Region.ULSAN`
-> - 경기도: `School.Region.GYEONGGI`
-> - 강원도: `School.Region.KANGWON`
-> - 충청북도: `School.Region.CHUNGBUK`
-> - 충청남도: `School.Region.CHUNGNAM`
-> - 경상북도: `School.Region.GYEONGBUK`
-> - 경상남도: `School.Region.GYEONGNAM`
-> - 전라북도: `School.Region.JEONBUK`
-> - 전라남도: `School.Region.JEONNAM`
-> - 제주도: `School.Region.JEJU`
+- 서울특별시: `School.Region.SEOUL`
+- 인천광역시: `School.Region.INCHEON`
+- 부산광역시: `School.Region.BUSAN`
+- 광주광역시: `School.Region.GWANGJU`
+- 대전광역시: `School.Region.DAEJEON`
+- 대구광역시: `School.Region.DAEGU`
+- 세종특별자치시: `School.Region.SEJONG`
+- 울산광역시: `School.Region.ULSAN`
+- 경기도: `School.Region.GYEONGGI`
+- 강원도: `School.Region.KANGWON`
+- 충청북도: `School.Region.CHUNGBUK`
+- 충청남도: `School.Region.CHUNGNAM`
+- 경상북도: `School.Region.GYEONGBUK`
+- 경상남도: `School.Region.GYEONGNAM`
+- 전라북도: `School.Region.JEONBUK`
+- 전라남도: `School.Region.JEONNAM`
+- 제주도: `School.Region.JEJU`
 
 예로 서울에 위치한 선덕고등학교를 설정해 보았습니다.
 
@@ -74,6 +74,8 @@ School api = new School(/* 학교 종류 */, /* 관할 지역 */, /* 학교 코�
 School api = new School(School.Type.HIGH, School.Region.SEOUL, "B100000465");
 ```
 
+
+#### 메뉴 불러오기 
 
 월간 메뉴는 `getMonthlyMenu(int year, int month)`로 불러올 수 있습니다.
 
@@ -98,15 +100,18 @@ System.out.println(menus.get(29).lunch);
 
 ```
 
-> **출력 예시**
-> ```
-> 보리밥
+
+ **출력 예시**
+```
+보리밥
 볶음짜장면⑤⑥⑩
 떡만두국①⑤⑥⑩⑬
 열무겉절이
 김치볶음⑤⑨
 구이김
-> ```
+```
+
+#### 학사일정 불러오기
 
 
 월간 학사일정은 `getMonthlySchedule(int year, int month)`로 불러올 수 있습니다.
@@ -127,10 +132,10 @@ System.out.println(menus.get(12).schedule);
 
 ```
 
-> **출력 예시**
-> ```
-> 학력고사
-> ```
+**출력 예시**
+```
+학력고사
+```
 
 ###라이센스
 
