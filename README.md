@@ -1,89 +1,139 @@
-school-api
-==========
+School API
+===================
 
-전국 각 시, 도의 교육청 학생서비스 페이지(hes.xxx.go.kr)을 파싱하여 급식 식단표(월간)와 학사 일정(월간)을 간단하게 읽어올 수 있습니다. 
+[School API](http://github.com/agemor/school-api)는 전국 교육청 학생 서비스 페이지(hes.xxx.go.kr)를 파싱하여 월간 **학사일정**과 **급식 메뉴**를 간편하게 불러옵니다.
 
+> **불러올 수 있는 범위:**
 
-##읽어올 수 있는 범위
-교육청에 등록되어있는 전국의 모든 공/사립 교육 기관
-1. 병설유치원
-2. 초등학교
-3. 중학교
-4. 고등학교
-
-##사용 방법
-
-    SchoolAPI.getMonthlyMenu(관할 교육청, 학교 코드, 학교 종류, 읽어올 해, 읽어올 달)
-
-1. 관할 교육청(String)
-    SchoolAPI.Country 를 통해 가능한 목록을 보실 수 있습니다.
-    <li>서울: Country.SEOUL
-    울산: Country.ULSAN
-    전북: Country.JEONBUK
-    부산: Country.BUSAN
-    세종: Country.SEJONG
-    전남: Country.JEONNAM
-    대구: Country.DAEGU
-    경기: Country.GYEONGGI
-    경북: Country.GYEONGBUK
-    인천: Country.INCHEON
-    강원: Country.KANGWON
-    경남: Country.GYEONGNAM
-    광주: Country.GWANGJU
-    충북: Country.CHUNGBUK
-    제주: Country.JEJU
-    대전: Country.DAEJEON
-    충남: Country.CHUNGNAM</li>
-    
-2. 학교 코드(String)
-    나이스(NEIS)에서 각 학교에 부여하는 코드입니다.
-    X10000XXXX 의 형식을 하고 있습니다. 맨 첫 자리는 지역에 따라 다릅니다.
-    구글에서 학교 코드 번호를 검색해서 찾거나 교육청 학교 검색 기능을 통해 찾을 수 있습니다.
-    
-3. 학교 종류(Int)
-    유치원(1), 초등학교(2), 중학교(3), 고등학교(4) 중에 해당되는 것을 입력하면 됩니다.
-    
-    유치원: SchoolType.KINDERGARTEN
-    초등학교: SchoolType.ELEMENRARY
-    중학교: SchoolType.MIDDLE
-    고등학교: SchoolType.HIGH
-    
-4. 읽어올 해(Int)
-    4자리 (ex. 2014) 로 입력합니다.
-    
-5. 읽어올 달(Int)
-    데이터를 읽어올 달을 입력합니다.
-    
-    
-##출력 결과
-급식의 경우, 
-
-    MenuData[] result = SchoolAPI.getMonthlyMenu(Country.SEOUL, "B100000465", SchoolType.HIGH, 2014, 10);
-을 실행하게 되면, 서울에 위치한 선덕고등학교의 2014년 10월 급식 식단표를 배열 형태(MenuData[])로 가져오게 됩니다.
-2014년 10월 1일 메뉴: result[0];
-2014년 10월 10일 메뉴: result[9];
-2014년 10월 31일 메뉴: result[30];
-
-조식(String): result[날짜-1].breakfast
-중식(String): result[날짜-1].lunch
-석식(String): result[날짜-1].dinner
-통째로 읽어오고 싶으면: result[날짜-1].toString()
-
-급식이 없을 경우 "급식 없음" 이 입력됩니다.
-
-학사 일정의 경우
-
-    ScheduleData[] result = SchoolAPI.getMonthlySchedule(Country.SEOUL, "B100000465", SchoolType.HIGH, 2014, 10);
-2014년 10월 1일의 일정: result[0];
-.. (이하 동일) ...
-
-일정을 읽어올 때는 result[날짜-1].schedule 로 쓰면 됩니다.
+>  전국의 모든 **교육청 소속 공/사립 교육기관**
+>  
+> - 병설유치원
+> - 초등학교
+> - 중학교
+> - 고등학교
+> 
+> **Tip** 특정 학교가 교육청 소속 기관인지는 [여기](http://www.schoolinfo.go.kr)에서 확인할 수 있습니다.
 
 
-##참고
-학교용 앱을 만들다 이런 API를 필요로 하는 분이 많으실 것 같아 제가 직접 만들어 공개하게 되었습니다.
-이 API는 html 파싱 라이브러리인 JSoup이 필요합니다. (www.jsoup.org)
+###설치하기
 
-## 제작
-김현준(agemor@naver.com)
-궁금한 점은 언제든지 연락주세요!
+[school.jar](https://github.com/agemor/school-api/raw/master/school.jar) 파일을 다운로드하여 프로젝트의 라이브러리에 추가합니다.
+
+```java
+import org.hyunjun.school.*;
+```
+를 했을 때 에러가 발생하지 않는다면 라이브러리에 올바르게 추가된 것입니다.
+
+
+###학교 코드와 관할 지역 검색하기
+
+데이터를 불러오기 위해서는 학교의 고유 코드를 알아야 합니다.
+[학교 코드.xls](https://github.com/agemor/school-api/raw/master/%ED%95%99%EA%B5%90%20%EC%BD%94%EB%93%9C.xls) 파일을 다운로드하여 불러오고자 하는 학교의 코드를 확인합니다.
+ 
+ 학교 코드는 `X000000000` 형식의 10자리 문자열입니다.
+
+
+###사용법
+
+School API를 사용하기 위해 `School`인스턴스를 생성합니다.
+```java
+School api = new School(/* 학교 종류 */, /* 관할 지역 */, /* 학교 코드 */);
+```
+
+ 학교 종류는 `School.Type` 에서 선택할 수 있습니다.
+
+> - 병설유치원: `School.Type.KINDERGARTEN`
+> - 초등학교: `School.Type.ELEMENTARY`
+> - 중학교: `School.Type.MIDDLE`
+> - 고등학교: `School.Type.HIGH`
+
+
+관할 지역은 `School.Region` 에서 선택할 수 있습니다.
+
+> - 서울특별시: `School.Region.SEOUL`
+> - 인천광역시: `School.Region.INCHEON`
+> - 부산광역시: `School.Region.BUSAN`
+> - 광주광역시: `School.Region.GWANGJU`
+> - 대전광역시: `School.Region.DAEJEON`
+> - 대구광역시: `School.Region.DAEGU`
+> - 세종특별자치시: `School.Region.SEJONG`
+> - 울산광역시: `School.Region.ULSAN`
+> - 경기도: `School.Region.GYEONGGI`
+> - 강원도: `School.Region.KANGWON`
+> - 충청북도: `School.Region.CHUNGBUK`
+> - 충청남도: `School.Region.CHUNGNAM`
+> - 경상북도: `School.Region.GYEONGBUK`
+> - 경상남도: `School.Region.GYEONGNAM`
+> - 전라북도: `School.Region.JEONBUK`
+> - 전라남도: `School.Region.JEONNAM`
+> - 제주도: `School.Region.JEJU`
+
+예로 서울에 위치한 선덕고등학교를 설정해 보았습니다.
+
+```java
+School api = new School(School.Type.HIGH, School.Region.SEOUL, "B100000465");
+```
+
+
+월간 메뉴는 `getMonthlyMenu(int year, int month)`로 불러올 수 있습니다.
+
+
+
+```java
+List<SchoolMenu> menus = api.getMonthlyMenu(2015, 4);
+
+for(int i = 0; i < menus.size(); i++) {
+    System.out.println((i + 1) + "일 식단");
+    System.out.println(menus.get(i));
+}
+
+// 24일 저녁 메뉴
+System.out.println(menus.get(23).dinner);
+
+// 1일 아침 메뉴
+System.out.println(menus.get(0).breakfast);
+
+// 30일 점심 메뉴
+System.out.println(menus.get(29).lunch);
+
+```
+
+> **출력 예시**
+> ```
+> 보리밥
+볶음짜장면⑤⑥⑩
+떡만두국①⑤⑥⑩⑬
+열무겉절이
+김치볶음⑤⑨
+구이김
+> ```
+>  ``` 급식이 없습니다
+> ```
+
+
+월간 학사일정은 `getMonthlySchedule(int year, int month)`로 불러올 수 있습니다.
+
+```java
+List<SchoolSchedule> schedules = api.getMonthlySchedule(2015, 4);
+
+for(int i = 0; i < schedules .size(); i++) {
+    System.out.println((i + 1) + "일 학사일정");
+    System.out.println(schedules .get(i));
+}
+
+// 5일 일정
+System.out.println(menus.get(4).schedule);
+
+// 13일 일정
+System.out.println(menus.get(12).schedule);
+
+```
+
+> **출력 예시**
+> ```
+> 학력고사
+> ```
+
+###라이센스
+
+이 소프트웨어는 [MIT 라이센스](#)를 따라 자유롭게 사용하실 수 있습니다.
