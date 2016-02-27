@@ -15,7 +15,8 @@ School API
 > **Tip** 특정 학교가 교육청 소속 기관인지는 [여기](http://www.schoolinfo.go.kr)에서 확인할 수 있습니다.
 
 
-###설치하기
+설치하기
+-----------
 
 [school.jar](https://github.com/agemor/school-api/raw/master/school.jar) 파일을 다운로드하여 프로젝트의 라이브러리에 추가합니다.
 
@@ -25,20 +26,17 @@ import org.hyunjun.school.*;
 를 했을 때 에러가 발생하지 않는다면 라이브러리에 올바르게 추가된 것입니다.
 
 
-###학교 코드와 관할 지역 검색하기
-
-데이터를 불러오기 위해서는 학교의 고유 코드를 알아야 합니다.
-[학교 코드.xls](https://github.com/agemor/school-api/raw/master/%ED%95%99%EA%B5%90%20%EC%BD%94%EB%93%9C.xls) 파일을 다운로드하여 불러오고자 하는 학교의 코드를 확인합니다.
- 
- 학교 코드는 `X000000000` 형식의 10자리 문자열입니다.
 
 
-###사용법
+사용법
+--------
 
 School API를 사용하기 위해 `School`인스턴스를 생성합니다.
 ```java
 School api = new School(/* 학교 종류 */, /* 관할 지역 */, /* 학교 코드 */);
 ```
+
+#### 학교 종류
 
  학교 종류는 `School.Type` 에서 선택할 수 있습니다.
 
@@ -47,6 +45,7 @@ School api = new School(/* 학교 종류 */, /* 관할 지역 */, /* 학교 코�
 - 중학교: `School.Type.MIDDLE`
 - 고등학교: `School.Type.HIGH`
 
+#### 관할 지역
 
 관할 지역은 `School.Region` 에서 선택할 수 있습니다.
 
@@ -67,6 +66,16 @@ School api = new School(/* 학교 종류 */, /* 관할 지역 */, /* 학교 코�
 - 전라북도: `School.Region.JEONBUK`
 - 전라남도: `School.Region.JEONNAM`
 - 제주도: `School.Region.JEJU`
+
+
+#### 학교 코드
+
+데이터를 불러오기 위해서는 학교의 고유 코드를 알아야 합니다.
+[학교 코드.xls](https://github.com/agemor/school-api/raw/master/%ED%95%99%EA%B5%90%20%EC%BD%94%EB%93%9C.xls) 파일을 다운로드하여 불러오고자 하는 학교의 코드를 확인합니다.
+ 
+ 학교 코드는 `X000000000` 형식의 10자리 문자열입니다.
+
+#### 설정 예시
 
 예로 서울에 위치한 선덕고등학교를 설정해 보았습니다.
 
@@ -137,6 +146,6 @@ System.out.println(menus.get(12).schedule);
 학력고사
 ```
 
-###라이센스
-
+라이센스
+-----------
 이 소프트웨어는 [MIT 라이센스](#)를 따라 자유롭게 사용하실 수 있습니다.
