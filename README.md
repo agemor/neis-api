@@ -107,8 +107,6 @@ System.out.println(menus.get(29).lunch);
 김치볶음⑤⑨
 구이김
 > ```
->  ``` 급식이 없습니다
-> ```
 
 
 월간 학사일정은 `getMonthlySchedule(int year, int month)`로 불러올 수 있습니다.
