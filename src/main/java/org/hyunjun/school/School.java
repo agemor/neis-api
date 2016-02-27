@@ -143,10 +143,5 @@ public class School {
     }
 
     public static void main(String[] args) {
-        System.out.println("Hello World");
-
-        School api = new School(School.Type.HIGH, School.Region.SEOUL, "B100000465");
-        String m = api.getMonthlySchedule(2015, 4).toString();
-        System.out.println(m);
     }
 }
