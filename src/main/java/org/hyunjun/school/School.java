@@ -32,23 +32,23 @@ public class School {
      */
     public enum Region {
 
-        /* 서울 */ SEOUL("hes.sen.go.kr"),
-        /* 인천 */ INCHEON("hes.ice.go.kr"),
-        /* 부산 */ BUSAN("hes.pen.go.kr"),
-        /* 광주 */ GWANGJU("hes.gen.go.kr"),
-        /* 대전 */ DAEJEON("hes.dje.go.kr"),
-        /* 대구 */ DAEGU("hes.dge.go.kr"),
-        /* 세종 */ SEJONG("hes.sje.go.kr"),
-        /* 울산 */ ULSAN("hes.use.go.kr"),
-        /* 경기 */ GYEONGGI("hes.goe.go.kr"),
-        /* 강원 */ KANGWON("hes.kwe.go.kr"),
-        /* 충북 */ CHUNGBUK("hes.cbe.go.kr"),
-        /* 충남 */ CHUNGNAM("hes.cne.go.kr"),
-        /* 경북 */ GYEONGBUK("hes.gbe.go.kr"),
-        /* 경남 */ GYEONGNAM("hes.gne.go.kr"),
-        /* 전북 */ JEONBUK("hes.jbe.go.kr"),
-        /* 전남 */ JEONNAM("hes.jne.go.kr"),
-        /* 제주 */ JEJU("hes.jje.go.kr");
+        /* 서울 */ SEOUL("stu.sen.go.kr"),
+        /* 인천 */ INCHEON("stu.ice.go.kr"),
+        /* 부산 */ BUSAN("stu.pen.go.kr"),
+        /* 광주 */ GWANGJU("stu.gen.go.kr"),
+        /* 대전 */ DAEJEON("stu.dje.go.kr"),
+        /* 대구 */ DAEGU("stu.dge.go.kr"),
+        /* 세종 */ SEJONG("stu.sje.go.kr"),
+        /* 울산 */ ULSAN("stu.use.go.kr"),
+        /* 경기 */ GYEONGGI("stu.goe.go.kr"),
+        /* 강원 */ KANGWON("stu.kwe.go.kr"),
+        /* 충북 */ CHUNGBUK("stu.cbe.go.kr"),
+        /* 충남 */ CHUNGNAM("stu.cne.go.kr"),
+        /* 경북 */ GYEONGBUK("stu.gbe.go.kr"),
+        /* 경남 */ GYEONGNAM("stu.gne.go.kr"),
+        /* 전북 */ JEONBUK("stu.jbe.go.kr"),
+        /* 전남 */ JEONNAM("stu.jne.go.kr"),
+        /* 제주 */ JEJU("stu.jje.go.kr");
 
         private String url;
 
