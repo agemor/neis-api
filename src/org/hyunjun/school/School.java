@@ -99,25 +99,18 @@ public class School {
      * @param month 해당 월을 m 형식으로 입력. (ex. 3, 12)
      * @return 각 일자별 급식메뉴 리스트
      */
-    public List<SchoolMenu> getMonthlyMenu(int year, int month) {
+    public List<SchoolMenu> getMonthlyMenu(int year, int month) throws IOException {
 
         StringBuffer targetUrl = new StringBuffer("http://" + schoolRegion.url + "/" + MONTHLY_MENU_URL);
+        targetUrl.append("?");
+        targetUrl.append("schulCode=" + schoolCode + "&");
+        targetUrl.append("schulCrseScCode=" + schoolType.id + "&");
+        targetUrl.append("schulKndScCode=" + "0" + schoolType.id + "&");
+        targetUrl.append("schYm=" + year + String.format("%02d", month) + "&");
 
-        try {
-            targetUrl.append("?");
-            targetUrl.append("schulCode=" + schoolCode + "&");
-            targetUrl.append("schulCrseScCode=" + schoolType.id + "&");
-            targetUrl.append("schulKndScCode=" + "0" + schoolType.id + "&");
-            targetUrl.append("schYm=" + year + String.format("%02d", month) + "&");
+        String content = getContentFromUrl(new URL(targetUrl.toString()), "<tbody>", "</tbody>");
 
-            String content = getContentFromUrl(new URL(targetUrl.toString()), "<tbody>", "</tbody>");
-
-            return SchoolMenuParser.parse(content);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return SchoolMenuParser.parse(content);
     }
 
     /**
@@ -127,26 +120,19 @@ public class School {
      * @param month 해당 월을 m 형식으로 입력. (ex. 3, 12)
      * @return 각 일자별 학사일정 리스트
      */
-    public List<SchoolSchedule> getMonthlySchedule(int year, int month) {
+    public List<SchoolSchedule> getMonthlySchedule(int year, int month) throws IOException {
 
         StringBuffer targetUrl = new StringBuffer("http://" + schoolRegion.url + "/" + SCHEDULE_URL);
+        targetUrl.append("?");
+        targetUrl.append("schulCode=" + schoolCode + "&");
+        targetUrl.append("schulCrseScCode=" + schoolType.id + "&");
+        targetUrl.append("schulKndScCode=" + "0" + schoolType.id + "&");
+        targetUrl.append("ay=" + year + "&");
+        targetUrl.append("mm=" + String.format("%02d", month) + "&");
 
-        try {
-            targetUrl.append("?");
-            targetUrl.append("schulCode=" + schoolCode + "&");
-            targetUrl.append("schulCrseScCode=" + schoolType.id + "&");
-            targetUrl.append("schulKndScCode=" + "0" + schoolType.id + "&");
-            targetUrl.append("ay=" + year + "&");
-            targetUrl.append("mm=" + String.format("%02d", month) + "&");
+        String content = getContentFromUrl(new URL(targetUrl.toString()), "<tbody>", "</tbody>");
 
-            String content = getContentFromUrl(new URL(targetUrl.toString()), "<tbody>", "</tbody>");
-
-            return SchoolScheduleParser.parse(content);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return SchoolScheduleParser.parse(content);
     }
 
     private String getContentFromUrl(URL url, String readAfter, String readBefore) throws IOException {
