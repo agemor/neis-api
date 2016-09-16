@@ -18,11 +18,11 @@ School api = new School(School.Type.HIGH, School.Region.SEOUL, "B100000465");
 List<SchoolMenu> menu = api.getMonthlyMenu(2016, 4);
 List<SchoolSchedule> schedule = api.getMonthlySchedule(2016, 4);
 
-// 2016년 4월 24일 저녁 식단표
-System.out.println(menu.get(23).dinner);
+// 2016년 4월 22일 저녁 식단표
+System.out.println(menu.get(21).dinner);
 
-// 2016년 4월 15일 학사일정
-System.out.println(schedule.get(14));
+// 2016년 4월 16일 학사일정
+System.out.println(schedule.get(15));
 ```
 
 #### 출력
