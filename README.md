@@ -1,7 +1,7 @@
 # School API
-> 빠르고 가벼운 전국 초,중,고등학교 학사일정/식단표 파서
+> 빠르고 가벼운 전국 초,중,고등학교 급식 식단표/학사일정 파서
 
-[School API](http://github.com/agemor/school-api)는 전국 교육청 학생 서비스 페이지(stu.xxx.go.kr)를 파싱하여 월간 **학사일정**과 **식단표**를 간편하게 불러올 수 있게 해 줍니다. 별다른 의존 라이브러리 없이 독립적으로 동작하기 때문에 9KB 정도의 용량만을 차지합니다.
+[School API](http://github.com/agemor/school-api)는 전국 교육청 학생 서비스 페이지(stu.xxx.go.kr)를 파싱하여 월간 **학사일정**과 **급식 식단표**를 간편하게 불러올 수 있게 해 줍니다. 별다른 의존 라이브러리 없이 독립적으로 동작하기 때문에 9KB 정도의 용량만을 차지합니다.
 
 ## 설치하기
 [최신 아카이브 파일](https://github.com/agemor/school-api/blob/master/bin/schoolapi-3.0.2.jar)을 다운로드하여 프로젝트에 추가하거나, 소스 코드를 프로젝트에 포함하여 설치합니다.
@@ -19,7 +19,7 @@ School api = new School(School.Type.HIGH, School.Region.SEOUL, "B100000465");
 List<SchoolMenu> menu = api.getMonthlyMenu(2016, 4);
 List<SchoolSchedule> schedule = api.getMonthlySchedule(2016, 4);
 
-// 2016년 4월 22일 저녁 식단표
+// 2016년 4월 22일 저녁 급식 식단표
 System.out.println(menu.get(21).dinner);
 
 // 2016년 4월 16일 학사일정
@@ -97,7 +97,7 @@ System.out.println(menuList.get(14).schedule);
 
 ### 급식 식단 불러오기
 
-월간 메뉴는 `getMonthlyMenu(int year, int month)`로 불러올 수 있습니다.
+월간 급식 메뉴는 `getMonthlyMenu(int year, int month)`로 불러올 수 있습니다.
 
 ```java
 List<SchoolMenu> menuList = api.getMonthlyMenu(2015, 4);
