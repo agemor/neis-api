@@ -1,36 +1,43 @@
-School API
-===================
+# School API
+> 빠르고 가벼운 전국 초,중,고등학교 학사일정/식단표 파서
 
-[School API](http://github.com/agemor/school-api)는 전국 교육청 학생 서비스 페이지(hes.xxx.go.kr)를 파싱하여 월간 **학사일정**과 **급식 메뉴**를 간편하게 불러옵니다.
+[School API](http://github.com/agemor/school-api)는 전국 교육청 학생 서비스 페이지(stu.xxx.go.kr)를 파싱하여 월간 **학사일정**과 **식단표**를 간편하게 불러올 수 있게 해 줍니다. 별다른 의존 라이브러리 없이 독립적으로 동작하기 때문에 9KB 정도의 용량만을 차지합니다.
 
-> **불러올 수 있는 범위:**
+## 설치하기
+[최신 아카이브 파일](https://github.com/agemor/school-api/blob/master/bin/schoolapi-3.0.1.jar)을 다운로드하여 프로젝트에 추가하거나, 소스 코드를 프로젝트에 포함하여 설치합니다.
 
->  전국의 모든 **교육청 소속 공/사립 교육기관**
->  
-> - 병설유치원
-> - 초등학교
-> - 중학교
-> - 고등학교
-> 
-> **Tip** 특정 학교가 교육청 소속 기관인지는 [여기](http://www.schoolinfo.go.kr)에서 확인할 수 있습니다.
+-  [schoolapi-3.0.1.jar](https://github.com/agemor/school-api/blob/master/bin/schoolapi-3.0.1.jar)
 
+## 사용 예시
 
-설치하기
------------
-
-[school.jar](https://github.com/agemor/school-api/raw/master/school.jar) 파일을 다운로드하여 프로젝트의 라이브러리에 추가합니다.
+#### 코드
 
 ```java
-import org.hyunjun.school.*;
+School api = new School(School.Type.HIGH, School.Region.SEOUL, "B100000465");
+
+List<SchoolMenu> menu = api.getMonthlyMenu(2016, 4);
+List<SchoolSchedule> schedule = api.getMonthlySchedule(2016, 4);
+
+// 2016년 4월 24일 저녁 식단표
+System.out.println(menu.get(23).dinner);
+
+// 2016년 4월 15일 학사일정
+System.out.println(schedule.get(14));
 ```
-를 했을 때 에러가 발생하지 않는다면 라이브러리에 올바르게 추가된 것입니다.
 
+#### 출력
+```
+보리밥
+볶음짜장면⑤⑥⑩
+떡만두국①⑤⑥⑩⑬
+열무겉절이
+김치볶음⑤⑨
+구이김
+학력고사
+```
+## 사용 방법
 
-
-
-사용법
---------
-
+### School 인스턴스 생성
 School API를 사용하기 위해 `School`인스턴스를 생성합니다.
 ```java
 School api = new School(/* 학교 종류 */, /* 관할 지역 */, /* 학교 코드 */);
@@ -67,85 +74,51 @@ School api = new School(/* 학교 종류 */, /* 관할 지역 */, /* 학교 코�
 - 전라남도: `School.Region.JEONNAM`
 - 제주도: `School.Region.JEJU`
 
-
 #### 학교 코드
 
-데이터를 불러오기 위해서는 학교의 고유 코드를 알아야 합니다.
-[학교 코드.xls](https://github.com/agemor/school-api/raw/master/%ED%95%99%EA%B5%90%20%EC%BD%94%EB%93%9C.xls) 파일을 다운로드하여 불러오고자 하는 학교의 코드를 확인합니다.
- 
+학교의 고유 코드는 [학교 코드.xls](https://github.com/agemor/school-api/raw/master/%ED%95%99%EA%B5%90%20%EC%BD%94%EB%93%9C.xls) 파일에서 확인하거나 [여기](http://www.schoolinfo.go.kr)에서 검색할 수 있습니다.
  학교 코드는 `X000000000` 형식의 10자리 문자열입니다.
-
-#### 설정 예시
-
-예로 서울에 위치한 선덕고등학교를 설정해 보았습니다.
+ 
+### 학사일정 불러오기
+월간 학사일정은 `getMonthlySchedule(int year, int month)`로 불러올 수 있습니다. 불러온 학사일정은 ArrayList 형태로 저장됩니다. 날짜는 0일부터 시작합니다. (1일 = 0, 2일 = 1, ... 31일=30)
 
 ```java
-School api = new School(School.Type.HIGH, School.Region.SEOUL, "B100000465");
+List<SchoolSchedule> scheduleList = api.getMonthlySchedule(2015, 4);
+
+for(int i = 0; i < scheduleList.size(); i++) {
+    System.out.println((i + 1) + "일 학사일정");
+    System.out.println(scheduleList.get(i));
+}
+
+// 15일 학사일정
+System.out.println(menuList.get(14).schedule);
 ```
 
-
-#### 메뉴 불러오기 
+### 급식 식단 불러오기
 
 월간 메뉴는 `getMonthlyMenu(int year, int month)`로 불러올 수 있습니다.
 
-
-
 ```java
-List<SchoolMenu> menus = api.getMonthlyMenu(2015, 4);
+List<SchoolMenu> menuList = api.getMonthlyMenu(2015, 4);
 
-for(int i = 0; i < menus.size(); i++) {
+for(int i = 0; i < menuList.size(); i++) {
     System.out.println((i + 1) + "일 식단");
-    System.out.println(menus.get(i));
+    System.out.println(menuList.get(i));
 }
 
 // 24일 저녁 메뉴
-System.out.println(menus.get(23).dinner);
+System.out.println(menuList.get(23).dinner);
 
 // 1일 아침 메뉴
-System.out.println(menus.get(0).breakfast);
+System.out.println(menuList.get(0).breakfast);
 
 // 30일 점심 메뉴
-System.out.println(menus.get(29).lunch);
-
+System.out.println(menuList.get(29).lunch);
 ```
+ 
+## 기여하기
+교육청 내부 URL 이동, HTML 구조 변경 등으로 파싱이 되지 않거나 에러가 발생할 수 있습니다. 이런 상황이 발생할 경우 이슈로 등록해 주시거나, 문제가 되는 부분을 수정하신 후 PR해 주시면 감사하겠습니다.
 
+## 라이센스
+이 소프트웨어는 [MIT 라이센스](https://github.com/agemor/school-api/blob/master/LICENSE)를 따라 자유롭게 이용하실 수 있습니다.
 
- **출력 예시**
-```
-보리밥
-볶음짜장면⑤⑥⑩
-떡만두국①⑤⑥⑩⑬
-열무겉절이
-김치볶음⑤⑨
-구이김
-```
-
-#### 학사일정 불러오기
-
-
-월간 학사일정은 `getMonthlySchedule(int year, int month)`로 불러올 수 있습니다.
-
-```java
-List<SchoolSchedule> schedules = api.getMonthlySchedule(2015, 4);
-
-for(int i = 0; i < schedules .size(); i++) {
-    System.out.println((i + 1) + "일 학사일정");
-    System.out.println(schedules .get(i));
-}
-
-// 5일 일정
-System.out.println(menus.get(4).schedule);
-
-// 13일 일정
-System.out.println(menus.get(12).schedule);
-
-```
-
-**출력 예시**
-```
-학력고사
-```
-
-라이센스
------------
-이 소프트웨어는 [MIT 라이센스](#)를 따라 자유롭게 사용하실 수 있습니다.
