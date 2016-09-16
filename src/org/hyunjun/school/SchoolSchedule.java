@@ -1,7 +1,11 @@
 package org.hyunjun.school;
 
 /**
- * 일간 학사 일정
+ * School API
+ * 전국 교육청 소속 교육기관의 학사일정, 메뉴를 간단히 불러올 수 있습니다.
+ *
+ * @author HyunJun Kim
+ * @version 3.0
  */
 public class SchoolSchedule {
 
