@@ -4,10 +4,10 @@
 [School API](http://github.com/agemor/school-api)는 전국 교육청 학생 서비스 페이지(stu.xxx.go.kr)를 파싱하여 월간 **학사일정**과 **급식 식단표**를 간편하게 불러올 수 있게 해 줍니다. 별다른 의존 라이브러리 없이 독립적으로 동작하기 때문에 9KB 정도의 용량만을 차지합니다.
 
 ## 설치하기
-[최신 아카이브 파일](https://github.com/agemor/school-api/blob/master/bin/schoolapi-3.0.2.jar)을 다운로드하여 프로젝트에 추가하거나, 소스 코드를 프로젝트에 포함하여 설치합니다.
+[최신 아카이브 파일](https://github.com/agemor/school-api/blob/master/bin/schoolapi-3.0.3.jar)을 다운로드하여 프로젝트에 추가하거나, 소스 코드를 프로젝트에 포함하여 설치합니다.
 
+-  [schoolapi-3.0.3.jar](https://github.com/agemor/school-api/blob/master/bin/schoolapi-3.0.3.jar)
 -  [schoolapi-3.0.2.jar](https://github.com/agemor/school-api/blob/master/bin/schoolapi-3.0.2.jar)
--  [schoolapi-3.0.1.jar](https://github.com/agemor/school-api/blob/master/bin/schoolapi-3.0.1.jar)
 
 ## 사용 예시
 
@@ -116,7 +116,10 @@ System.out.println(menuList.get(0).breakfast);
 // 30일 점심 메뉴
 System.out.println(menuList.get(29).lunch);
 ```
- 
+
+## 변경 사항
+3.0.3 - 문제 상황에 알맞는 Exeption이 발생합니다.
+
 ## 기여하기
 교육청 내부 URL 이동, HTML 구조 변경 등으로 파싱이 되지 않거나 에러가 발생할 수 있습니다. 이런 상황이 발생할 경우 이슈로 등록해 주시거나, 문제가 되는 부분을 수정하신 후 PR해 주시면 감사하겠습니다.
 
