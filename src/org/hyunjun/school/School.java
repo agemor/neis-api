@@ -3,6 +3,7 @@ package org.hyunjun.school;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
@@ -99,7 +100,7 @@ public class School {
      * @param month 해당 월을 m 형식으로 입력. (ex. 3, 12)
      * @return 각 일자별 급식메뉴 리스트
      */
-    public List<SchoolMenu> getMonthlyMenu(int year, int month) throws IOException {
+    public List<SchoolMenu> getMonthlyMenu(int year, int month) throws SchoolException {
 
         StringBuffer targetUrl = new StringBuffer("http://" + schoolRegion.url + "/" + MONTHLY_MENU_URL);
         targetUrl.append("?");
@@ -108,9 +109,12 @@ public class School {
         targetUrl.append("schulKndScCode=" + "0" + schoolType.id + "&");
         targetUrl.append("schYm=" + year + String.format("%02d", month) + "&");
 
-        String content = getContentFromUrl(new URL(targetUrl.toString()), "<tbody>", "</tbody>");
-
-        return SchoolMenuParser.parse(content);
+        try {
+            String content = getContentFromUrl(new URL(targetUrl.toString()), "<tbody>", "</tbody>");
+            return SchoolMenuParser.parse(content);
+        } catch (MalformedURLException e) {
+            throw new SchoolException("교육청 접속 주소가 올바르지 않습니다.");
+        }
     }
 
     /**
@@ -120,7 +124,7 @@ public class School {
      * @param month 해당 월을 m 형식으로 입력. (ex. 3, 12)
      * @return 각 일자별 학사일정 리스트
      */
-    public List<SchoolSchedule> getMonthlySchedule(int year, int month) throws IOException {
+    public List<SchoolSchedule> getMonthlySchedule(int year, int month) throws SchoolException {
 
         StringBuffer targetUrl = new StringBuffer("http://" + schoolRegion.url + "/" + SCHEDULE_URL);
         targetUrl.append("?");
@@ -130,32 +134,39 @@ public class School {
         targetUrl.append("ay=" + year + "&");
         targetUrl.append("mm=" + String.format("%02d", month) + "&");
 
-        String content = getContentFromUrl(new URL(targetUrl.toString()), "<tbody>", "</tbody>");
-
-        return SchoolScheduleParser.parse(content);
+        try {
+            String content = getContentFromUrl(new URL(targetUrl.toString()), "<tbody>", "</tbody>");
+            return SchoolScheduleParser.parse(content);
+        } catch (MalformedURLException e) {
+            throw new SchoolException("교육청 접속 주소가 올바르지 않습니다.");
+        }
     }
 
-    private String getContentFromUrl(URL url, String readAfter, String readBefore) throws IOException {
+    private String getContentFromUrl(URL url, String readAfter, String readBefore) throws SchoolException {
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
 
-        StringBuffer buffer = new StringBuffer();
-        String inputLine;
+            StringBuffer buffer = new StringBuffer();
+            String inputLine;
 
-        boolean reading = false;
+            boolean reading = false;
 
-        while ((inputLine = reader.readLine()) != null) {
-            if (reading) {
-                if (inputLine.contains(readBefore))
-                    break;
-                buffer.append(inputLine);
-            } else {
-                if (inputLine.contains(readAfter))
-                    reading = true;
+            while ((inputLine = reader.readLine()) != null) {
+                if (reading) {
+                    if (inputLine.contains(readBefore))
+                        break;
+                    buffer.append(inputLine);
+                } else {
+                    if (inputLine.contains(readAfter))
+                        reading = true;
+                }
             }
-        }
-        reader.close();
+            reader.close();
+            return buffer.toString();
 
-        return buffer.toString();
+        } catch (IOException e) {
+            throw new SchoolException("교육청 서버에 접속하지 못하였습니다.");
+        }
     }
 }

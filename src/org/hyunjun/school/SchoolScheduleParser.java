@@ -18,7 +18,10 @@ public class SchoolScheduleParser {
      * @param rawData
      * @return
      */
-    public static List<SchoolSchedule> parse(String rawData) {
+    public static List<SchoolSchedule> parse(String rawData) throws SchoolException {
+
+        if (rawData.length() < 1)
+            throw new SchoolException("불러온 데이터가 올바르지 않습니다.");
 
         List<SchoolSchedule> monthlySchedule = new ArrayList<SchoolSchedule>();
 
@@ -30,25 +33,29 @@ public class SchoolScheduleParser {
 
         String[] chunk = rawData.split("textL\">");
 
-        for (int i = 1; i < chunk.length; i++) {
-            String trimmed = before(chunk[i], "</div>");
-            String date = before(after(trimmed, ">"), "</em>");
+        try {
+            for (int i = 1; i < chunk.length; i++) {
+                String trimmed = before(chunk[i], "</div>");
+                String date = before(after(trimmed, ">"), "</em>");
 
-            // 빈 공간은 파싱하지 않습니다.
-            if (date.length() < 1) continue;
+                // 빈 공간은 파싱하지 않습니다.
+                if (date.length() < 1) continue;
 
-            // 일정이 있는 경우
-            if (trimmed.indexOf("<strong>") > 0) {
-                String name = before(after(trimmed, "<strong>"), "</strong>");
-                monthlySchedule.add(new SchoolSchedule(name));
+                // 일정이 있는 경우
+                if (trimmed.indexOf("<strong>") > 0) {
+                    String name = before(after(trimmed, "<strong>"), "</strong>");
+                    monthlySchedule.add(new SchoolSchedule(name));
+                }
+                // 일정이 없는 경우
+                else {
+                    monthlySchedule.add(new SchoolSchedule());
+                }
             }
-            // 일정이 없는 경우
-            else {
-                monthlySchedule.add(new SchoolSchedule());
-            }
+            return monthlySchedule;
+
+        } catch (Exception e) {
+            throw new SchoolException("학사일정 정보 파싱에 실패했습니다. 최신 버전으로 업데이트 해 주세요.");
         }
-
-        return monthlySchedule;
     }
 
     /**

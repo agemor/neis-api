@@ -18,7 +18,10 @@ public class SchoolMenuParser {
      * @param rawData
      * @return
      */
-    public static List<SchoolMenu> parse(String rawData) {
+    public static List<SchoolMenu> parse(String rawData) throws SchoolException {
+
+        if (rawData.length() < 1)
+            throw new SchoolException("불러온 데이터가 올바르지 않습니다.");
 
         List<SchoolMenu> monthlyMenu = new ArrayList<SchoolMenu>();
 
@@ -35,23 +38,28 @@ public class SchoolMenuParser {
 
         boolean inDiv = false;
 
-        for (int i = 0; i < rawData.length(); i++) {
-            if (rawData.charAt(i) == 'v') {
-                if (inDiv) {
-                    buffer.delete(buffer.length() - 4, buffer.length());
-                    if (buffer.length() > 0)
-                        monthlyMenu.add(parseDay(buffer.toString()));
-                    buffer.setLength(0);
-                } else {
-                    i++;
+        try {
+            for (int i = 0; i < rawData.length(); i++) {
+                if (rawData.charAt(i) == 'v') {
+                    if (inDiv) {
+                        buffer.delete(buffer.length() - 4, buffer.length());
+                        if (buffer.length() > 0)
+                            monthlyMenu.add(parseDay(buffer.toString()));
+                        buffer.setLength(0);
+                    } else {
+                        i++;
+                    }
+                    inDiv = !inDiv;
+                } else if (inDiv) {
+                    buffer.append(rawData.charAt(i));
                 }
-                inDiv = !inDiv;
-            } else if (inDiv) {
-                buffer.append(rawData.charAt(i));
             }
-        }
 
-        return monthlyMenu;
+            return monthlyMenu;
+
+        } catch (Exception e) {
+            throw new SchoolException("급식 정보 파싱에 실패했습니다. 최신 버전으로 업데이트 해 주세요.");
+        }
     }
 
     private static SchoolMenu parseDay(String rawData) {
