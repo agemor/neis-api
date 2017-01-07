@@ -6,7 +6,7 @@
 ## 설치하기
 [최신 아카이브 파일](https://github.com/agemor/school-api/releases/download/3.0.3/school-api-3.0.3.jar)을 다운로드하여 프로젝트에 추가하거나, 소스 코드를 프로젝트에 포함하여 설치합니다.
 
--  [schoolapi-3.0.3.jar](https://github.com/agemor/school-api/releases/download/3.0.3/school-api-3.0.3.jar)
+-  [school-api-3.0.3.jar](https://github.com/agemor/school-api/releases/download/3.0.3/school-api-3.0.3.jar)
 
 ## 사용 예시
 
