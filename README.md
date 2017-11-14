@@ -82,7 +82,7 @@ School api = new School(/* 학교 종류 */, /* 관할 지역 */, /* 학교 코�
 
 #### 학교 코드
 
-학교의 고유 코드는 [학교 코드.xls](https://github.com/agemor/school-api/raw/master/%ED%95%99%EA%B5%90%20%EC%BD%94%EB%93%9C.xls) 파일에서 확인하거나 [여기](http://www.schoolinfo.go.kr)에서 검색할 수 있습니다.
+학교의 고유 코드는 [여기](https://www.meatwatch.go.kr/biz/bm/sel/schoolListPopup.do)에서 학교명으로 검색할 수 있습니다.
  학교 코드는 `X000000000` 형식의 10자리 문자열입니다.
  
 ### 학사일정 불러오기
