@@ -102,7 +102,7 @@ public class School {
      */
     public List<SchoolMenu> getMonthlyMenu(int year, int month) throws SchoolException {
 
-        StringBuffer targetUrl = new StringBuffer("http://" + schoolRegion.url + "/" + MONTHLY_MENU_URL);
+        StringBuffer targetUrl = new StringBuffer("https://" + schoolRegion.url + "/" + MONTHLY_MENU_URL);
         targetUrl.append("?");
         targetUrl.append("schulCode=" + schoolCode + "&");
         targetUrl.append("schulCrseScCode=" + schoolType.id + "&");
@@ -126,7 +126,7 @@ public class School {
      */
     public List<SchoolSchedule> getMonthlySchedule(int year, int month) throws SchoolException {
 
-        StringBuffer targetUrl = new StringBuffer("http://" + schoolRegion.url + "/" + SCHEDULE_URL);
+        StringBuffer targetUrl = new StringBuffer("https://" + schoolRegion.url + "/" + SCHEDULE_URL);
         targetUrl.append("?");
         targetUrl.append("schulCode=" + schoolCode + "&");
         targetUrl.append("schulCrseScCode=" + schoolType.id + "&");
