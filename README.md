@@ -82,7 +82,7 @@ School api = new School(/* 학교 종류 */, /* 관할 지역 */, /* 학교 코�
 
 #### 학교 코드
 
-학교의 고유 코드는 [여기](https://www.meatwatch.go.kr/biz/bm/sel/schoolListPopup.do)에서 학교명으로 검색할 수 있습니다.
+학교의 고유 코드는 [여기](https://code.schoolmenukr.ml/)에서 학교명으로 검색할 수 있습니다.
  학교 코드는 `X000000000` 형식의 10자리 문자열입니다.
  
 ### 학사일정 불러오기
