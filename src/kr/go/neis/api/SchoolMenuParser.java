@@ -1,4 +1,4 @@
-package org.hyunjun.school;
+package kr.go.neis.api;
 
 import java.util.ArrayList;
 import java.util.List;

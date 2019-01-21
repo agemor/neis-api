@@ -3,5 +3,8 @@
 *.iml
 
 # IntelliJ
-out/
+out
 .idea
+
+# Test file
+/src/Main.java

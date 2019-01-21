@@ -1,10 +1,10 @@
-# School API
+# NEIS API
 > 빠르고 가벼운 전국 초,중,고등학교 급식 식단표/학사일정 파서
 
-[School API](http://github.com/agemor/school-api)는 전국 교육청 학생 서비스 페이지(stu.xxx.go.kr)를 파싱하여 월간 **학사일정**과 **급식 식단표**를 간편하게 불러올 수 있게 해 줍니다. 별다른 의존 라이브러리 없이 독립적으로 동작하기 때문에 9KB 정도의 용량만을 차지합니다.
+나이스(교육행정정보시스템) 학생서비스 페이지 파싱을 통해 월간 **학사일정**과 **급식 식단표**를 간편하게 불러올 수 있게 해 주는 API입니다. 한 번 로드된 데이터는 캐시하여 관리하고, 의존 라이브러리가 없어 9KB 정도의 적은 용량만을 차지하기 때문에 빠르고 가볍게 동작합니다.
 
 ## 설치하기
-[최신 아카이브 파일](https://github.com/agemor/school-api/releases/download/3.0.5/school-api-3.0.5.jar)을 다운로드하여 프로젝트에 추가하거나, 소스 코드를 프로젝트에 포함하여 설치합니다.
+최신 아카이브 파일을 다운로드하여 프로젝트에 추가하거나, 소스 코드를 프로젝트에 포함하여 설치합니다.
 
 -  [school-api-3.0.5.jar](https://github.com/agemor/school-api/releases/download/3.0.5/school-api-3.0.5.jar)
 
@@ -84,7 +84,7 @@ School api = new School(/* 학교 종류 */, /* 관할 지역 */, /* 학교 코�
 
 학교의 고유 코드는 [여기](https://code.schoolmenukr.ml/)에서 학교명으로 검색할 수 있습니다.
  학교 코드는 `X000000000` 형식의 10자리 문자열입니다.
- 
+
 ### 학사일정 불러오기
 월간 학사일정은 `getMonthlySchedule(int year, int month)`로 불러올 수 있습니다. 불러온 학사일정은 ArrayList 형태로 저장됩니다. 날짜는 0일부터 시작합니다. (1일 = 0, 2일 = 1, ... 31일=30)
 
