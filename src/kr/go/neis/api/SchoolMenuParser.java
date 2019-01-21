@@ -10,20 +10,17 @@ import java.util.List;
  * @author HyunJun Kim
  * @version 3.0
  */
-public class SchoolMenuParser {
+class SchoolMenuParser {
 
     /**
      * 웹에서 가져온 데이터를 바탕으로 급식 메뉴를 파싱합니다.
-     *
-     * @param rawData
-     * @return
      */
-    public static List<SchoolMenu> parse(String rawData) throws SchoolException {
+    static List<SchoolMenu> parse(String rawData) throws SchoolException {
 
         if (rawData.length() < 1)
             throw new SchoolException("불러온 데이터가 올바르지 않습니다.");
 
-        List<SchoolMenu> monthlyMenu = new ArrayList<SchoolMenu>();
+        List<SchoolMenu> monthlyMenu = new ArrayList<>();
 
         /*
          파싱 편의를 위해 모든 공백을 제거합니다.
@@ -34,7 +31,7 @@ public class SchoolMenuParser {
         /*
          <div> - </div> 쌍을 찾아 그 사이의 데이터를 추출합니다.
          */
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
 
         boolean inDiv = false;
 
@@ -58,10 +55,13 @@ public class SchoolMenuParser {
             return monthlyMenu;
 
         } catch (Exception e) {
-            throw new SchoolException("급식 정보 파싱에 실패했습니다. 최신 버전으로 업데이트 해 주세요.");
+            throw new SchoolException("급식 정보 파싱에 실패했습니다. API를 최신 버전으로 업데이트 해 주세요.");
         }
     }
 
+    /**
+     * 하루의 식단을 파싱합니다.
+     */
     private static SchoolMenu parseDay(String rawData) {
 
         SchoolMenu menu = new SchoolMenu();
@@ -74,47 +74,37 @@ public class SchoolMenuParser {
 
         // 0 - 조식, 1 - 중식, 2 - 석식
         int parsingMode = 0;
+        StringBuilder[] menuStrings = new StringBuilder[3];
+        for (int i = 0; i < 3; i++)
+            menuStrings[i] = new StringBuilder();
 
         for (int i = 1; i < chunk.length; i++) {
 
             if (chunk[i].trim().length() < 1)
                 continue;
 
-            if (chunk[i].equals("[조식]")) {
-                parsingMode = 0;
-                menu.breakfast = "";
-                continue;
-            } else if (chunk[i].equals("[중식]")) {
-                parsingMode = 1;
-                menu.lunch = "";
-                continue;
-            } else if (chunk[i].equals("[석식]")) {
-                parsingMode = 2;
-                menu.dinner = "";
-                continue;
+            switch(chunk[i]) {
+                case "[조식]":
+                    parsingMode = 0;
+                    continue;
+                case "[중식]":
+                    parsingMode = 1;
+                    continue;
+                case "[석식]":
+                    parsingMode = 2;
+                    continue;
             }
 
-            switch (parsingMode) {
-                case 0:
-                    if (menu.breakfast.length() > 1)
-                        menu.breakfast += "\n" + chunk[i];
-                    else
-                        menu.breakfast += chunk[i];
-                    break;
-                case 1:
-                    if (menu.lunch.length() > 1)
-                        menu.lunch += "\n" + chunk[i];
-                    else
-                        menu.lunch += chunk[i];
-                    break;
-                case 2:
-                    if (menu.dinner.length() > 1)
-                        menu.dinner += "\n" + chunk[i];
-                    else
-                        menu.dinner += chunk[i];
-                    break;
-            }
+            // 메뉴를 해당 시간에 맞게 추가합니다.
+            if (menuStrings[parsingMode].length() > 0)
+                menuStrings[parsingMode].append("\n");
+            menuStrings[parsingMode].append(chunk[i]);
         }
+
+        menu.breakfast = menuStrings[0].toString();
+        menu.lunch = menuStrings[1].toString();
+        menu.dinner = menuStrings[2].toString();
+
         return menu;
     }
 }
