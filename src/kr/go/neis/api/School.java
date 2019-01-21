@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * School API
@@ -81,6 +83,12 @@ public class School {
     public String code;
 
     /**
+     * 캐시용 해시맵
+     */
+    private Map<Integer, List<SchoolMenu>> monthlyMenuCache;
+    private Map<Integer, List<SchoolSchedule>> monthlyScheduleCache;
+
+    /**
      * 불러올 학교 정보를 설정합니다.
      *
      * @param type   교육기관의 종류입니다. (School.Type 에서 병설유치원, 초등학교, 중학교, 고등학교 중 선택)
@@ -91,6 +99,8 @@ public class School {
         this.type = type;
         this.region = region;
         this.code = code;
+        this.monthlyMenuCache = new HashMap<>();
+        this.monthlyScheduleCache = new HashMap<>();
     }
 
     /**
@@ -101,6 +111,11 @@ public class School {
      * @return 각 일자별 급식메뉴 리스트
      */
     public List<SchoolMenu> getMonthlyMenu(int year, int month) throws SchoolException {
+
+        int cacheKey = year * 12 + month;
+
+        if (this.monthlyMenuCache.containsKey(cacheKey))
+            return this.monthlyMenuCache.get(cacheKey);
 
         StringBuilder targetUrl = new StringBuilder();
 
@@ -113,7 +128,13 @@ public class School {
 
         try {
             String content = getContentFromUrl(new URL(targetUrl.toString()), "<tbody>", "</tbody>");
-            return SchoolMenuParser.parse(content);
+
+            // 리턴하기 전 캐시에 데이터를 저장합니다.
+            List<SchoolMenu> monthlyMenu = SchoolMenuParser.parse(content);
+            this.monthlyMenuCache.put(cacheKey, monthlyMenu);
+
+            return monthlyMenu;
+
         } catch (MalformedURLException e) {
             throw new SchoolException("교육청 접속 주소가 올바르지 않습니다.");
         }
@@ -128,6 +149,11 @@ public class School {
      */
     public List<SchoolSchedule> getMonthlySchedule(int year, int month) throws SchoolException {
 
+        int cacheKey = year * 12 + month;
+
+        if (this.monthlyScheduleCache.containsKey(cacheKey))
+            return this.monthlyScheduleCache.get(cacheKey);
+
         StringBuilder targetUrl = new StringBuilder();
 
         targetUrl.append("https://").append(region.url).append("/").append(SCHEDULE_URL);
@@ -140,10 +166,20 @@ public class School {
 
         try {
             String content = getContentFromUrl(new URL(targetUrl.toString()), "<tbody>", "</tbody>");
-            return SchoolScheduleParser.parse(content);
+
+            List<SchoolSchedule> monthlySchedule = SchoolScheduleParser.parse(content);
+            this.monthlyScheduleCache.put(cacheKey, monthlySchedule);
+
+            return monthlySchedule;
+
         } catch (MalformedURLException e) {
             throw new SchoolException("교육청 접속 주소가 올바르지 않습니다.");
         }
+    }
+
+    public void clearCache() {
+        this.monthlyScheduleCache.clear();
+        this.monthlyMenuCache.clear();
     }
 
     private String getContentFromUrl(URL url, String readAfter, String readBefore) throws SchoolException {
