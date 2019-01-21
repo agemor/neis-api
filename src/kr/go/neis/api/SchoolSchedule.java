@@ -9,7 +9,7 @@ package kr.go.neis.api;
  */
 public class SchoolSchedule {
 
-    public String schedule;
+    private String schedule;
 
     /**
      * 일정이 없을 경우
@@ -21,7 +21,7 @@ public class SchoolSchedule {
     /**
      * 일정이 있을 경우
      *
-     * @param schedule
+     * @param schedule 학사일정 인스턴스
      */
     public SchoolSchedule(String schedule) {
         this.schedule = schedule;
