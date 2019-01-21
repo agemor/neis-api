@@ -11,17 +11,14 @@ import java.util.regex.Pattern;
  * @author HyunJun Kim
  * @version 3.0
  */
-public class SchoolScheduleParser {
+class SchoolScheduleParser {
 
     private static Pattern schedulePattern;
 
     /**
      * 웹에서 가져온 데이터를 바탕으로 학사일정을 파싱합니다.
-     *
-     * @param rawData
-     * @return
      */
-    public static List<SchoolSchedule> parse(String rawData) throws SchoolException {
+    static List<SchoolSchedule> parse(String rawData) throws SchoolException {
 
         if (schedulePattern == null) {
             schedulePattern = Pattern.compile("<strong></strong>");
@@ -30,7 +27,7 @@ public class SchoolScheduleParser {
         if (rawData.length() < 1)
             throw new SchoolException("불러온 데이터가 올바르지 않습니다.");
 
-        List<SchoolSchedule> monthlySchedule = new ArrayList<SchoolSchedule>();
+        List<SchoolSchedule> monthlySchedule = new ArrayList<>();
 
         /*
          파싱 편의를 위해 모든 공백을 제거합니다.
@@ -50,7 +47,7 @@ public class SchoolScheduleParser {
 
                 // 일정을 가져옵니다.
                 StringBuilder schedule = new StringBuilder();
-                while (trimmed.indexOf("<strong>") >= 0) {
+                while (trimmed.contains("<strong>")) {
                     String name = before(after(trimmed, "<strong>"), "</strong>");
                     schedule.append(name);
                     schedule.append("\n");
@@ -67,10 +64,6 @@ public class SchoolScheduleParser {
 
     /**
      * 문자열에서 delimiter 전까지의 문자열을 반환합니다.
-     *
-     * @param string
-     * @param delimiter
-     * @return
      */
     private static String before(String string, String delimiter) {
         int index = string.indexOf(delimiter);
@@ -79,14 +72,10 @@ public class SchoolScheduleParser {
 
     /**
      * 문자열에서 delimiter 이후의 문자열을 반환합니다.
-     *
-     * @param string
-     * @param delimiter
-     * @return
      */
     private static String after(String string, String delimiter) {
         int index = string.indexOf(delimiter);
-        return string.substring(index + delimiter.length(), string.length());
+        return string.substring(index + delimiter.length());
     }
 
 }
