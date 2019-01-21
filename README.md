@@ -13,11 +13,11 @@
 #### 코드
 
 ```java
-School api = new School(School.Type.HIGH, School.Region.SEOUL, "B100000465");
-
 try {
-    List<SchoolMenu> menu = api.getMonthlyMenu(2019, 1);
-    List<SchoolSchedule> schedule = api.getMonthlySchedule(2018, 12);
+    School school = School.find(School.Region.SEOUL, "선덕고등학교");
+
+    List<SchoolMenu> menu = school.getMonthlyMenu(2019, 1);
+    List<SchoolSchedule> schedule = school.getMonthlySchedule(2018, 12);
 
     // 2019년 1월 2일 점심 급식 식단표
     System.out.println(menu.get(1).lunch);
@@ -48,9 +48,13 @@ try {
 ## 사용 방법
 
 ### School 인스턴스 생성
-School API를 사용하기 위해 `School`인스턴스를 생성합니다.
+NEIS API를 사용하기 위해 `School`인스턴스가 우선 생성되어야 합니다. 생성에는 세 가지 정보가 필요합니다.
 ```java
-School api = new School(/* 학교 종류 */, /* 관할 지역 */, /* 학교 코드 */);
+School school = new School(/* 학교 종류 */, /* 관할 지역 */, /* 학교 코드 */);
+```
+혹은 학교명으로 검색하여 생성할 수도 있습니다. 이 방법은 학교 정보를 NEIS에서 검색하여 가져오므로 위의 방법보다 시간이 더 소요됩니다.
+```java
+School school = School.find(/* 관할 지역 */, /* 학교 이름 */);
 ```
 
 #### 학교 종류
@@ -93,7 +97,7 @@ School api = new School(/* 학교 종류 */, /* 관할 지역 */, /* 학교 코�
 월간 학사일정은 `getMonthlySchedule(int year, int month)`로 불러올 수 있습니다. 불러온 학사일정은 ArrayList 형태로 저장됩니다. 날짜는 0일부터 시작합니다. (1일 = 0, 2일 = 1, ... 31일=30)
 
 ```java
-List<SchoolSchedule> scheduleList = api.getMonthlySchedule(2015, 4);
+List<SchoolSchedule> scheduleList = school.getMonthlySchedule(2018, 4);
 
 for(int i = 0; i < scheduleList.size(); i++) {
     System.out.println((i + 1) + "일 학사일정");
@@ -101,7 +105,7 @@ for(int i = 0; i < scheduleList.size(); i++) {
 }
 
 // 15일 학사일정
-System.out.println(menuList.get(14).schedule);
+System.out.println(scheduleList.get(14).schedule);
 ```
 
 ### 급식 식단 불러오기
@@ -109,7 +113,7 @@ System.out.println(menuList.get(14).schedule);
 월간 급식 메뉴는 `getMonthlyMenu(int year, int month)`로 불러올 수 있습니다.
 
 ```java
-List<SchoolMenu> menuList = api.getMonthlyMenu(2015, 4);
+List<SchoolMenu> menuList = school.getMonthlyMenu(2018, 4);
 
 for(int i = 0; i < menuList.size(); i++) {
     System.out.println((i + 1) + "일 식단");
@@ -128,7 +132,7 @@ System.out.println(menuList.get(29).lunch);
 
 ## 변경 사항
 3.0.3 - 문제 상황에 알맞는 Exeption이 발생합니다.
-3.1.0 - 여러 일정이 불러와지지 않던 오류 수정과 캐시 기능 추가
+3.1.0 - 여러 일정이 불러와지지 않던 오류 수정과 캐시 기능, 학교 검색 기능 추가
 
 ## 기여하기
 교육청 내부 URL 이동, HTML 구조 변경 등으로 파싱이 되지 않거나 에러가 발생할 수 있습니다. 이런 상황이 발생할 경우 이슈로 등록해 주시거나, 문제가 되는 부분을 수정하신 후 PR해 주시면 감사하겠습니다.
