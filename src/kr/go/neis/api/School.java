@@ -5,12 +5,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * School API
+ * NEIS API
  * 전국 교육청 소속 교육기관의 학사일정, 메뉴를 간단히 불러올 수 있습니다.
  *
  * @author HyunJun Kim
@@ -39,23 +40,23 @@ public class School {
      */
     public enum Region {
 
-        /* 서울 */ SEOUL("stu.sen.go.kr"),
-        /* 인천 */ INCHEON("stu.ice.go.kr"),
-        /* 부산 */ BUSAN("stu.pen.go.kr"),
-        /* 광주 */ GWANGJU("stu.gen.go.kr"),
-        /* 대전 */ DAEJEON("stu.dje.go.kr"),
-        /* 대구 */ DAEGU("stu.dge.go.kr"),
-        /* 세종 */ SEJONG("stu.sje.go.kr"),
-        /* 울산 */ ULSAN("stu.use.go.kr"),
-        /* 경기 */ GYEONGGI("stu.goe.go.kr"),
-        /* 강원 */ KANGWON("stu.kwe.go.kr"),
-        /* 충북 */ CHUNGBUK("stu.cbe.go.kr"),
-        /* 충남 */ CHUNGNAM("stu.cne.go.kr"),
-        /* 경북 */ GYEONGBUK("stu.gbe.go.kr"),
-        /* 경남 */ GYEONGNAM("stu.gne.go.kr"),
-        /* 전북 */ JEONBUK("stu.jbe.go.kr"),
-        /* 전남 */ JEONNAM("stu.jne.go.kr"),
-        /* 제주 */ JEJU("stu.jje.go.kr");
+        /* 서울 */ SEOUL("sen.go.kr"),
+        /* 인천 */ INCHEON("ice.go.kr"),
+        /* 부산 */ BUSAN("pen.go.kr"),
+        /* 광주 */ GWANGJU("gen.go.kr"),
+        /* 대전 */ DAEJEON("dje.go.kr"),
+        /* 대구 */ DAEGU("dge.go.kr"),
+        /* 세종 */ SEJONG("sje.go.kr"),
+        /* 울산 */ ULSAN("use.go.kr"),
+        /* 경기 */ GYEONGGI("goe.go.kr"),
+        /* 강원 */ KANGWON("kwe.go.kr"),
+        /* 충북 */ CHUNGBUK("cbe.go.kr"),
+        /* 충남 */ CHUNGNAM("cne.go.kr"),
+        /* 경북 */ GYEONGBUK("gbe.go.kr"),
+        /* 경남 */ GYEONGNAM("gne.go.kr"),
+        /* 전북 */ JEONBUK("jbe.go.kr"),
+        /* 전남 */ JEONNAM("jne.go.kr"),
+        /* 제주 */ JEJU("jje.go.kr");
 
         private String url;
 
@@ -66,6 +67,7 @@ public class School {
 
     private static final String MONTHLY_MENU_URL = "sts_sci_md00_001.do";
     private static final String SCHEDULE_URL = "sts_sci_sf01_001.do";
+    private static final String SCHOOL_CODE_URL = "spr_ccm_cm01_100.do";
 
     /**
      * 교육기관의 종류
@@ -119,7 +121,7 @@ public class School {
 
         StringBuilder targetUrl = new StringBuilder();
 
-        targetUrl.append("https://").append(region.url).append("/").append(MONTHLY_MENU_URL);
+        targetUrl.append("https://stu.").append(region.url).append("/").append(MONTHLY_MENU_URL);
         targetUrl.append("?schulCode=").append(code);
         targetUrl.append("&schulCrseScCode=").append(type.id);
         targetUrl.append("&schulKndScCode=0").append(type.id);
@@ -127,7 +129,8 @@ public class School {
         targetUrl.append("&");
 
         try {
-            String content = getContentFromUrl(new URL(targetUrl.toString()), "<tbody>", "</tbody>");
+            String content = getContentFromUrl(new URL(targetUrl.toString()));
+            content = Utils.before(Utils.after(content, "<tbody>"), "</tbody>");
 
             // 리턴하기 전 캐시에 데이터를 저장합니다.
             List<SchoolMenu> monthlyMenu = SchoolMenuParser.parse(content);
@@ -156,7 +159,7 @@ public class School {
 
         StringBuilder targetUrl = new StringBuilder();
 
-        targetUrl.append("https://").append(region.url).append("/").append(SCHEDULE_URL);
+        targetUrl.append("https://stu.").append(region.url).append("/").append(SCHEDULE_URL);
         targetUrl.append("?schulCode=").append(code);
         targetUrl.append("&schulCrseScCode=").append(type.id);
         targetUrl.append("&schulKndScCode=0").append(type.id);
@@ -165,7 +168,8 @@ public class School {
         targetUrl.append("&");
 
         try {
-            String content = getContentFromUrl(new URL(targetUrl.toString()), "<tbody>", "</tbody>");
+            String content = getContentFromUrl(new URL(targetUrl.toString()));
+            content = Utils.before(Utils.after(content, "<tbody>"), "</tbody>");
 
             List<SchoolSchedule> monthlySchedule = SchoolScheduleParser.parse(content);
             this.monthlyScheduleCache.put(cacheKey, monthlySchedule);
@@ -182,30 +186,45 @@ public class School {
         this.monthlyMenuCache.clear();
     }
 
-    private String getContentFromUrl(URL url, String readAfter, String readBefore) throws SchoolException {
+    private static String getContentFromUrl(URL url) throws SchoolException {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
 
             StringBuilder buffer = new StringBuilder();
             String inputLine;
 
-            boolean reading = false;
-
             while ((inputLine = reader.readLine()) != null) {
-                if (reading) {
-                    if (inputLine.contains(readBefore))
-                        break;
-                    buffer.append(inputLine);
-                } else {
-                    if (inputLine.contains(readAfter))
-                        reading = true;
-                }
+                buffer.append(inputLine);
             }
             reader.close();
             return buffer.toString();
 
         } catch (IOException e) {
             throw new SchoolException("교육청 서버에 접속하지 못하였습니다.");
+        }
+    }
+
+    public static School find(Region region, String name) throws SchoolException {
+        try {
+            StringBuilder targetUrl = new StringBuilder();
+
+            targetUrl.append("https://par.").append(region.url).append("/").append(SCHOOL_CODE_URL);
+            targetUrl.append("?kraOrgNm=").append(URLEncoder.encode(name, "utf-8"));
+            targetUrl.append("&");
+
+            // 원본 데이터는 JSON형식으로 이루어져 있습니다.
+            String content = getContentFromUrl(new URL(targetUrl.toString()));
+            content = Utils.before(Utils.after(content, "orgCode"), "schulCrseScCodeNm");
+
+            // 기관 종류와 코드를 구합니다.
+            String schoolCode = content.substring(3, 13);
+            String schoolType = Utils.before(Utils.after(content,"schulCrseScCode\":\""), "\"");
+
+            return new School(Type.values()[Integer.parseInt(schoolType) - 1], region, schoolCode);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new SchoolException("학교를 찾을 수 없습니다.");
         }
     }
 }

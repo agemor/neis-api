@@ -1,11 +1,13 @@
 package kr.go.neis.api;
 
+import jdk.jshell.execution.Util;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
 /**
- * School API
+ * NEIS API
  * 전국 교육청 소속 교육기관의 학사일정, 메뉴를 간단히 불러올 수 있습니다.
  *
  * @author HyunJun Kim
@@ -39,8 +41,8 @@ class SchoolScheduleParser {
 
         try {
             for (int i = 1; i < chunk.length; i++) {
-                String trimmed = before(chunk[i], "</div>");
-                String date = before(after(trimmed, ">"), "</em>");
+                String trimmed = Utils.before(chunk[i], "</div>");
+                String date = Utils.before(Utils.after(trimmed, ">"), "</em>");
 
                 // 빈 공간은 파싱하지 않습니다.
                 if (date.length() < 1) continue;
@@ -48,10 +50,10 @@ class SchoolScheduleParser {
                 // 일정을 가져옵니다.
                 StringBuilder schedule = new StringBuilder();
                 while (trimmed.contains("<strong>")) {
-                    String name = before(after(trimmed, "<strong>"), "</strong>");
+                    String name = Utils.before(Utils.after(trimmed, "<strong>"), "</strong>");
                     schedule.append(name);
                     schedule.append("\n");
-                    trimmed = after(trimmed, "</strong>");
+                    trimmed = Utils.after(trimmed, "</strong>");
                 }
                 monthlySchedule.add(new SchoolSchedule(schedule.toString()));
             }
@@ -60,22 +62,6 @@ class SchoolScheduleParser {
         } catch (Exception e) {
             throw new SchoolException("학사일정 정보 파싱에 실패했습니다. API를 최신 버전으로 업데이트 해 주세요.");
         }
-    }
-
-    /**
-     * 문자열에서 delimiter 전까지의 문자열을 반환합니다.
-     */
-    private static String before(String string, String delimiter) {
-        int index = string.indexOf(delimiter);
-        return string.substring(0, index);
-    }
-
-    /**
-     * 문자열에서 delimiter 이후의 문자열을 반환합니다.
-     */
-    private static String after(String string, String delimiter) {
-        int index = string.indexOf(delimiter);
-        return string.substring(index + delimiter.length());
     }
 
 }

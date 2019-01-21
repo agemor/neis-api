@@ -128,10 +128,11 @@ System.out.println(menuList.get(29).lunch);
 
 ## 변경 사항
 3.0.3 - 문제 상황에 알맞는 Exeption이 발생합니다.
+3.1.0 - 여러 일정이 불러와지지 않던 오류 수정과 캐시 기능 추가
 
 ## 기여하기
 교육청 내부 URL 이동, HTML 구조 변경 등으로 파싱이 되지 않거나 에러가 발생할 수 있습니다. 이런 상황이 발생할 경우 이슈로 등록해 주시거나, 문제가 되는 부분을 수정하신 후 PR해 주시면 감사하겠습니다.
 
 ## 라이센스
-이 소프트웨어는 [MIT 라이센스](https://github.com/agemor/school-api/blob/master/LICENSE)를 따라 자유롭게 이용하실 수 있습니다.
+이 라이브러리는 [MIT 라이센스](https://github.com/agemor/school-api/blob/master/LICENSE)를 따라 자유롭게 이용하실 수 있습니다.
 
