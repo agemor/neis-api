@@ -16,14 +16,14 @@
 School api = new School(School.Type.HIGH, School.Region.SEOUL, "B100000465");
 
 try {
-    List<SchoolMenu> menu = api.getMonthlyMenu(2017, 4);
-    List<SchoolSchedule> schedule = api.getMonthlySchedule(2017, 4);
+    List<SchoolMenu> menu = api.getMonthlyMenu(2019, 1);
+    List<SchoolSchedule> schedule = api.getMonthlySchedule(2018, 12);
 
-    // 2017년 4월 22일 저녁 급식 식단표
-    System.out.println(menu.get(21).dinner);
+    // 2019년 1월 2일 점심 급식 식단표
+    System.out.println(menu.get(1).lunch);
 
-    // 2017년 4월 16일 학사일정
-    System.out.println(schedule.get(15));
+    // 2018년 12월 5일 학사일정
+    System.out.println(schedule.get(4));
 
 } catch (SchoolException e) {
     e.printStackTrace();
@@ -33,13 +33,17 @@ try {
 
 #### 출력
 ```
-보리밥
-볶음짜장면⑤⑥⑩
-떡만두국①⑤⑥⑩⑬
-열무겉절이
-김치볶음⑤⑨
-구이김
-학력고사
+칼슘찹쌀밥
+옥수수스프(빠네)1.2.5.6.13.
+경양식돈까스1.2.5.6.10.12.13.
+마카로니사과샐러드1.5.6.13.
+모듬피클13.
+복숭아플리또1.2.5.11.13.
+단호박범벅1.5.13.
+
+자치
+생명존중자살예방교육
+대학입시제도의이해
 ```
 ## 사용 방법
 
