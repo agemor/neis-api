@@ -6,7 +6,7 @@
 ## 설치하기
 최신 아카이브 파일을 다운로드하여 프로젝트에 추가하거나, 소스 코드를 프로젝트에 포함하여 설치합니다.
 
--  [school-api-3.1.0.jar](https://github.com/agemor/neis-api/releases/download/3.1.0/neis-api-3.1.0.jar)
+-  [neisl-api-3.1.0.jar](https://github.com/agemor/neis-api/releases/download/3.1.0/neis-api-3.1.0.jar)
 
 ## 사용 예시
 
