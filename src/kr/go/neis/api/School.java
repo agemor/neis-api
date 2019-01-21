@@ -68,29 +68,29 @@ public class School {
     /**
      * 교육기관의 종류
      */
-    public Type schoolType;
+    public Type type;
 
     /**
      * 교육기관 관할 지역
      */
-    public Region schoolRegion;
+    public Region region;
 
     /**
      * 교육기관 고유 코드
      */
-    public String schoolCode;
+    public String code;
 
     /**
      * 불러올 학교 정보를 설정합니다.
      *
-     * @param schoolType   교육기관의 종류입니다. (School.Type 에서 병설유치원, 초등학교, 중학교, 고등학교 중 선택)
-     * @param schoolRegion 관할 교육청의 위치입니다. (School.Region 에서 선택)
-     * @param schoolCode   교육기관의 고유 코드입니다.
+     * @param type   교육기관의 종류입니다. (School.Type 에서 병설유치원, 초등학교, 중학교, 고등학교 중 선택)
+     * @param region 관할 교육청의 위치입니다. (School.Region 에서 선택)
+     * @param code   교육기관의 고유 코드입니다.
      */
-    public School(Type schoolType, Region schoolRegion, String schoolCode) {
-        this.schoolType = schoolType;
-        this.schoolRegion = schoolRegion;
-        this.schoolCode = schoolCode;
+    public School(Type type, Region region, String code) {
+        this.type = type;
+        this.region = region;
+        this.code = code;
     }
 
     /**
@@ -102,12 +102,14 @@ public class School {
      */
     public List<SchoolMenu> getMonthlyMenu(int year, int month) throws SchoolException {
 
-        StringBuffer targetUrl = new StringBuffer("https://" + schoolRegion.url + "/" + MONTHLY_MENU_URL);
-        targetUrl.append("?");
-        targetUrl.append("schulCode=" + schoolCode + "&");
-        targetUrl.append("schulCrseScCode=" + schoolType.id + "&");
-        targetUrl.append("schulKndScCode=" + "0" + schoolType.id + "&");
-        targetUrl.append("schYm=" + year + String.format("%02d", month) + "&");
+        StringBuilder targetUrl = new StringBuilder();
+
+        targetUrl.append("https://").append(region.url).append("/").append(MONTHLY_MENU_URL);
+        targetUrl.append("?schulCode=").append(code);
+        targetUrl.append("&schulCrseScCode=").append(type.id);
+        targetUrl.append("&schulKndScCode=0").append(type.id);
+        targetUrl.append("&schYm=").append(year).append(String.format("%02d", month));
+        targetUrl.append("&");
 
         try {
             String content = getContentFromUrl(new URL(targetUrl.toString()), "<tbody>", "</tbody>");
@@ -126,13 +128,15 @@ public class School {
      */
     public List<SchoolSchedule> getMonthlySchedule(int year, int month) throws SchoolException {
 
-        StringBuffer targetUrl = new StringBuffer("https://" + schoolRegion.url + "/" + SCHEDULE_URL);
-        targetUrl.append("?");
-        targetUrl.append("schulCode=" + schoolCode + "&");
-        targetUrl.append("schulCrseScCode=" + schoolType.id + "&");
-        targetUrl.append("schulKndScCode=" + "0" + schoolType.id + "&");
-        targetUrl.append("ay=" + year + "&");
-        targetUrl.append("mm=" + String.format("%02d", month) + "&");
+        StringBuilder targetUrl = new StringBuilder();
+
+        targetUrl.append("https://").append(region.url).append("/").append(SCHEDULE_URL);
+        targetUrl.append("?schulCode=").append(code);
+        targetUrl.append("&schulCrseScCode=").append(type.id);
+        targetUrl.append("&schulKndScCode=0").append(type.id);
+        targetUrl.append("&ay=").append(year);
+        targetUrl.append("&mm=").append(String.format("%02d", month));
+        targetUrl.append("&");
 
         try {
             String content = getContentFromUrl(new URL(targetUrl.toString()), "<tbody>", "</tbody>");
@@ -146,7 +150,7 @@ public class School {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
 
-            StringBuffer buffer = new StringBuffer();
+            StringBuilder buffer = new StringBuilder();
             String inputLine;
 
             boolean reading = false;
