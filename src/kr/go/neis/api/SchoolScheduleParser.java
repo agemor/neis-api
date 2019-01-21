@@ -2,6 +2,7 @@ package kr.go.neis.api;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * School API
@@ -12,6 +13,8 @@ import java.util.List;
  */
 public class SchoolScheduleParser {
 
+    private static Pattern schedulePattern;
+
     /**
      * 웹에서 가져온 데이터를 바탕으로 학사일정을 파싱합니다.
      *
@@ -19,6 +22,10 @@ public class SchoolScheduleParser {
      * @return
      */
     public static List<SchoolSchedule> parse(String rawData) throws SchoolException {
+
+        if (schedulePattern == null) {
+            schedulePattern = Pattern.compile("<strong></strong>");
+        }
 
         if (rawData.length() < 1)
             throw new SchoolException("불러온 데이터가 올바르지 않습니다.");
@@ -41,20 +48,20 @@ public class SchoolScheduleParser {
                 // 빈 공간은 파싱하지 않습니다.
                 if (date.length() < 1) continue;
 
-                // 일정이 있는 경우
-                if (trimmed.indexOf("<strong>") > 0) {
+                // 일정을 가져옵니다.
+                StringBuilder schedule = new StringBuilder();
+                while (trimmed.indexOf("<strong>") >= 0) {
                     String name = before(after(trimmed, "<strong>"), "</strong>");
-                    monthlySchedule.add(new SchoolSchedule(name));
+                    schedule.append(name);
+                    schedule.append("\n");
+                    trimmed = after(trimmed, "</strong>");
                 }
-                // 일정이 없는 경우
-                else {
-                    monthlySchedule.add(new SchoolSchedule());
-                }
+                monthlySchedule.add(new SchoolSchedule(schedule.toString()));
             }
             return monthlySchedule;
 
         } catch (Exception e) {
-            throw new SchoolException("학사일정 정보 파싱에 실패했습니다. 최신 버전으로 업데이트 해 주세요.");
+            throw new SchoolException("학사일정 정보 파싱에 실패했습니다. API를 최신 버전으로 업데이트 해 주세요.");
         }
     }
 

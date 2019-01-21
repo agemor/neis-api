@@ -143,7 +143,6 @@ public class School {
     }
 
     private String getContentFromUrl(URL url, String readAfter, String readBefore) throws SchoolException {
-
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
 
