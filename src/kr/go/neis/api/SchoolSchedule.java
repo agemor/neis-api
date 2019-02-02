@@ -1,4 +1,4 @@
-package kr.go.neis.api;
+﻿package kr.go.neis.api;
 
 /**
  * NEIS API
@@ -9,7 +9,7 @@ package kr.go.neis.api;
  */
 public class SchoolSchedule {
 
-    private String schedule;
+    public String schedule;
 
     /**
      * 일정이 없을 경우
