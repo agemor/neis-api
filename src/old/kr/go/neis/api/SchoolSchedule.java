@@ -1,4 +1,4 @@
-﻿package kr.go.neis.api;
+package old.kr.go.neis.api;
 
 /**
  * NEIS API
