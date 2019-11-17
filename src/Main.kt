@@ -1,6 +1,4 @@
 
-package kr.go.neis.api
-
 
 fun main(args: Array<String>) {
 
