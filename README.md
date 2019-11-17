@@ -12,23 +12,16 @@
 
 #### 코드
 
-```java
-try {
-    School school = School.find(School.Region.SEOUL, "선덕고등학교");
+```kotlin
+val school = School.find(School.Region.SEOUL, "선덕고등학교")
 
-    List<SchoolMenu> menu = school.getMonthlyMenu(2019, 1);
-    List<SchoolSchedule> schedule = school.getMonthlySchedule(2018, 12);
+// 2019년 1월 2일 점심 급식 식단표
+val menu = school.getMonthlyMenu(2019, 1);
+println(menu[1].lunch)
 
-    // 2019년 1월 2일 점심 급식 식단표
-    System.out.println(menu.get(1).lunch);
-
-    // 2018년 12월 5일 학사일정
-    System.out.println(schedule.get(4));
-
-} catch (SchoolException e) {
-    e.printStackTrace();
-}
-
+// 2018년 12월 5일 학사일정
+val schedule = school.getMonthlySchedule(2018, 12)
+println(schedule[4])
 ```
 
 #### 출력
@@ -49,12 +42,12 @@ try {
 
 ### School 인스턴스 생성
 NEIS API를 사용하기 위해 `School`인스턴스가 우선 생성되어야 합니다. 생성에는 세 가지 정보가 필요합니다.
-```java
-School school = new School(/* 학교 종류 */, /* 관할 지역 */, /* 학교 코드 */);
+```kotlin
+val school = School(/* 학교 종류 */, /* 관할 지역 */, /* 학교 코드 */);
 ```
-혹은 학교명으로 검색하여 생성할 수도 있습니다. 이 방법은 학교 정보를 NEIS에서 검색하여 가져오므로 위의 방법보다 시간이 더 소요됩니다.
-```java
-School school = School.find(/* 관할 지역 */, /* 학교 이름 */);
+혹은 학교명으로 검색하여 자동 생성할 수도 있습니다. 이 방법은 학교 정보를 NEIS에서 검색하여 가져오므로 위의 방법보다 시간이 더 소요됩니다.
+```kotlin
+val school = School.find(/* 관할 지역 */, /* 학교 이름 */);
 ```
 
 #### 학교 종류
@@ -94,46 +87,56 @@ School school = School.find(/* 관할 지역 */, /* 학교 이름 */);
  학교 코드는 `X000000000` 형식의 10자리 문자열입니다.
 
 ### 학사일정 불러오기
-월간 학사일정은 `getMonthlySchedule(int year, int month)`로 불러올 수 있습니다. 불러온 학사일정은 ArrayList 형태로 저장됩니다. 날짜는 0일부터 시작합니다. (1일 = 0, 2일 = 1, ... 31일=30)
+월간 학사일정은 `getMonthlySchedule(year:Int, month:Int)`로 불러올 수 있습니다. 불러온 학사일정은 ArrayList 형태로 저장됩니다. 날짜는 0일부터 시작합니다. (1일 = 0, 2일 = 1, ... 31일=30)
 
-```java
-List<SchoolSchedule> scheduleList = school.getMonthlySchedule(2018, 4);
+```kotlin
+// 2018년 12월의 학사일정 불러오기
+val schedule = school.getMonthlySchedule(2018, 12)
 
-for(int i = 0; i < scheduleList.size(); i++) {
-    System.out.println((i + 1) + "일 학사일정");
-    System.out.println(scheduleList.get(i));
+// 그 달의 모든 일정을 출력
+for (i in schedule.indices) {
+    println("${i + 1}일 학사일정")
+    println(schedule[i])
 }
 
 // 15일 학사일정
-System.out.println(scheduleList.get(14).schedule);
+println(schedule[14]);
 ```
 
 ### 급식 식단 불러오기
 
-월간 급식 메뉴는 `getMonthlyMenu(int year, int month)`로 불러올 수 있습니다.
+월간 급식 메뉴는 `getMonthlyMenu(year:Int, month:Int)`로 불러올 수 있습니다.
 
-```java
-List<SchoolMenu> menuList = school.getMonthlyMenu(2018, 4);
+```kotlin
+// 2019년 1월의 급식 식단 불러오기
+val menu = school.getMonthlyMenu(2019, 1)
 
-for(int i = 0; i < menuList.size(); i++) {
-    System.out.println((i + 1) + "일 식단");
-    System.out.println(menuList.get(i));
+// 그 달의 모든 식단을 출력
+for (i in menu.indices) {
+    println("${i + 1}일 메뉴")
+    println(menu[i])
 }
-
 // 24일 저녁 메뉴
-System.out.println(menuList.get(23).dinner);
+println(menu[23].dinner);
 
 // 1일 아침 메뉴
-System.out.println(menuList.get(0).breakfast);
+println(menu[0].breakfast);
 
 // 30일 점심 메뉴
-System.out.println(menuList.get(29).lunch);
+println(menu[29].lunch);
 ```
 
-## 변경 사항
-3.0.3 - 문제 상황에 알맞는 Exeption이 발생합니다.
+### 사용 시 주의사항
+NEIS API 내 모든 메서드들은 동기적(synchronous) IO를 사용합니다. 따라서 NEIS 서버에서 데이터를 로드하는 메서드 (`getMonthlyMenu`,`getMonthlySchedule`,`find`) 사용 시 스레드나 코루틴 등으로 병렬 처리를 해 주셔야 blocking 이 발생하지 않습니다.
 
-3.1.0 - 여러 일정이 불러와지지 않던 오류 수정과 캐시 기능, 학교 검색 기능 추가
+
+
+## 변경사항
+- 3.0.3 - 문제 상황에 알맞는 Exeption이 발생합니다.
+
+- 3.1.0 - 여러 일정이 불러와지지 않던 오류 수정과 캐시 기능, 학교 검색 기능 추가
+
+- 4.0.0 - Kotlin으로 마이그레이션
 
 ## 기여하기
 교육청 내부 URL 이동, HTML 구조 변경 등으로 파싱이 되지 않거나 에러가 발생할 수 있습니다. 이런 상황이 발생할 경우 이슈로 등록해 주시거나, 문제가 되는 부분을 수정하신 후 PR해 주시면 감사하겠습니다.

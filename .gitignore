@@ -1,12 +1,5 @@
-# File-based project format
-*.iws
-*.iml
+# Ignore Gradle project-specific cache directory
+.gradle
 
-# IntelliJ
-out
-.idea
-
-# Test file
-/src/Main.java
-
-META-INF
+# Ignore Gradle build output directory
+build
