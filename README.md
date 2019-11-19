@@ -16,7 +16,7 @@
 val school = School.find(School.Region.SEOUL, "선덕고등학교")
 
 // 2019년 1월 2일 점심 급식 식단표
-val menu = school.getMonthlyMenu(2019, 1);
+val menu = school.getMonthlyMenu(2019, 1)
 println(menu[1].lunch)
 
 // 2018년 12월 5일 학사일정
@@ -43,11 +43,11 @@ println(schedule[4])
 ### School 인스턴스 생성
 NEIS API를 사용하기 위해 `School`인스턴스가 우선 생성되어야 합니다. 생성에는 세 가지 정보가 필요합니다.
 ```kotlin
-val school = School(/* 학교 종류 */, /* 관할 지역 */, /* 학교 코드 */);
+val school = School(/* 학교 종류 */, /* 관할 지역 */, /* 학교 코드 */)
 ```
 혹은 학교명으로 검색하여 자동 생성할 수도 있습니다. 이 방법은 학교 정보를 NEIS에서 검색하여 가져오므로 위의 방법보다 시간이 더 소요됩니다.
 ```kotlin
-val school = School.find(/* 관할 지역 */, /* 학교 이름 */);
+val school = School.find(/* 관할 지역 */, /* 학교 이름 */)
 ```
 
 #### 학교 종류
@@ -100,7 +100,7 @@ for (i in schedule.indices) {
 }
 
 // 15일 학사일정
-println(schedule[14]);
+println(schedule[14])
 ```
 
 ### 급식 식단 불러오기
@@ -117,13 +117,13 @@ for (i in menu.indices) {
     println(menu[i])
 }
 // 24일 저녁 메뉴
-println(menu[23].dinner);
+println(menu[23].dinner)
 
 // 1일 아침 메뉴
-println(menu[0].breakfast);
+println(menu[0].breakfast)
 
 // 30일 점심 메뉴
-println(menu[29].lunch);
+println(menu[29].lunch)
 ```
 
 ### 사용 시 주의사항

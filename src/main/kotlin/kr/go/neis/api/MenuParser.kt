@@ -12,9 +12,9 @@ object MenuParser {
     /**
      * 웹에서 가져온 데이터를 바탕으로 급식 메뉴를 파싱합니다.
      */
-    fun parse(rawData: String): List<Menu> {
+    fun parse(htmlText: String): List<Menu> {
 
-        if (rawData.isEmpty())
+        if (htmlText.isEmpty())
             throw NEISException("불러온 데이터가 올바르지 않습니다.")
 
         val monthlyMenu = ArrayList<Menu>()
@@ -23,7 +23,7 @@ object MenuParser {
          파싱 편의를 위해 모든 공백을 제거합니다.
          급식 메뉴의 이름에는 공백이 들어가지 않으므로, 파싱 결과에는 영향을 주지 않습니다.
          */
-        val rawData = rawData.replace("\\s+".toRegex(), "")
+        val text = htmlText.replace("\\s+".toRegex(), "")
         /*
          <div> - </div> 쌍을 찾아 그 사이의 데이터를 추출합니다.
          */
@@ -33,8 +33,8 @@ object MenuParser {
 
         try {
             var i = 0
-            while (i < rawData.length) {
-                if (rawData[i] == 'v') {
+            while (i < text.length) {
+                if (text[i] == 'v') {
                     if (inDiv) {
                         buffer.delete(buffer.length - 4, buffer.length)
                         if (buffer.isNotEmpty())
@@ -45,7 +45,7 @@ object MenuParser {
                     }
                     inDiv = !inDiv
                 } else if (inDiv) {
-                    buffer.append(rawData[i])
+                    buffer.append(text[i])
                 }
                 i++
             }
@@ -63,14 +63,14 @@ object MenuParser {
     /**
      * 하루의 식단을 파싱합니다.
      */
-    private fun parseDay(rawData: String): Menu {
+    private fun parseDay(htmlText: String): Menu {
 
         val menu = Menu()
 
         // & 표기를 수정합니다.
-        var rawData = rawData.replace("&amp", "&")
+        val text = htmlText.replace("&amp", "&")
 
-        val chunk = rawData.split("<br/>".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        val chunk = text.split("<br/>".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
         // 0 - 조식, 1 - 중식, 2 - 석식
         var parsingMode = 0
@@ -83,7 +83,7 @@ object MenuParser {
             if (chunk[i].trim().isEmpty())
                 continue
 
-            var label = false;
+            var label = false
 
             when (chunk[i]) {
                 "[조식]" -> {

@@ -7,13 +7,7 @@ package kr.go.neis.api
  * @author HyunJun Kim
  * @version 4.0
  */
-class Schedule {
-
-    var schedule: String = ""
-
-    constructor(schedule: String) {
-        this.schedule = schedule
-    }
+class Schedule(var schedule: String) {
 
     override fun toString(): String {
         return schedule

@@ -48,17 +48,17 @@ class School {
     /**
      * 교육기관의 종류
      */
-    var type: Type = Type.HIGH;
+    var type: Type = Type.HIGH
 
     /**
      * 교육기관 관할 지역
      */
-    var region: Region = Region.SEOUL;
+    var region: Region = Region.SEOUL
 
     /**
      * 교육기관 고유 코드
      */
-    var code: String = "";
+    var code: String = ""
 
     /**
      * 캐시용 해시맵
@@ -83,26 +83,32 @@ class School {
         /**
          * NEIS 시스템에서 교육기관 정보를 조회합니다.
          *
-         * @param region 교육기관 소재지
+         * @param schoolRegion 교육기관 소재지
          * @param name 교육기관 명칭
          */
-        fun find(region: School.Region, name: String): School {
+        @Throws(NEISException::class)
+        fun find(schoolRegion: Region, name: String): School {
 
             val url = URL(
-                "https://par.${region.url}/spr_ccm_cm01_100.do" +
-                        "?kraOrgNm=${URLEncoder.encode(name, "utf-8")}&"
+                    "https://par.${schoolRegion.url}/spr_ccm_cm01_100.do" +
+                            "?kraOrgNm=${URLEncoder.encode(name, "utf-8")}&"
             )
 
-            // 원본 데이터는 JSON형식으로 이루어져 있습니다.
-            var content = before(after(url.readText(), "orgCode"), "schulCrseScCodeNm")
+            try {
+                // 원본 데이터는 JSON형식으로 이루어져 있습니다.
+                val content = before(after(url.readText(), "orgCode"), "schulCrseScCodeNm")
 
-            // 기관 종류와 코드를 구합니다.
-            var typeIndex = before(after(content, "schulCrseScCode\":\""), "\"").toInt() - 1
+                // 기관 종류와 코드를 구합니다.
+                val schoolTypeIndex = before(after(content, "schulCrseScCode\":\""), "\"").toInt() - 1
 
-            val type = School.Type.values()[typeIndex]
-            val code = content.substring(3, 13)
+                val schoolType = Type.values()[schoolTypeIndex]
+                val schoolCode = content.substring(3, 13)
 
-            return School(type, region, code)
+                return School(schoolType, schoolRegion, schoolCode)
+
+            } catch (e: Exception) {
+                throw NEISException("조건에 해당하는 교육기관을 찾을 수 없습니다.")
+            }
         }
     }
 
@@ -113,6 +119,7 @@ class School {
      * @param month 해당 월을 m 형식으로 입력. (ex. 3, 12)
      * @return 각 일자별 급식메뉴 리스트
      */
+    @Throws(NEISException::class)
     fun getMonthlyMenu(year: Int, month: Int): List<Menu> {
 
         val cacheKey = year * 12 + month
@@ -121,14 +128,14 @@ class School {
             return this.monthlyMenuCache.getOrDefault(cacheKey, emptyList())
 
         val url = URL(
-            "https://stu.${region.url}/sts_sci_md00_001.do" +
-                    "?schulCode=${code}" +
-                    "&schulCrseScCode=${type.id}" +
-                    "&schulKndScCode=0${type.id}" +
-                    "&schYm=${year}${String.format("%02d", month)}&"
+                "https://stu.${region.url}/sts_sci_md00_001.do" +
+                        "?schulCode=${code}" +
+                        "&schulCrseScCode=${type.id}" +
+                        "&schulKndScCode=0${type.id}" +
+                        "&schYm=${year}${String.format("%02d", month)}&"
         )
 
-        var content = before(after(url.readText(), "<tbody>"), "</tbody>")
+        val content = before(after(url.readText(), "<tbody>"), "</tbody>")
 
         // 리턴하기 전 캐시에 데이터를 저장합니다.
         val monthlyMenu = MenuParser.parse(content)
@@ -144,6 +151,7 @@ class School {
      * @param month 해당 월을 m 형식으로 입력. (ex. 3, 12)
      * @return 각 일자별 학사일정 리스트
      */
+    @Throws(NEISException::class)
     fun getMonthlySchedule(year: Int, month: Int): List<Schedule> {
 
         val cacheKey = year * 12 + month
@@ -152,15 +160,15 @@ class School {
             return this.monthlyScheduleCache.getOrDefault(cacheKey, emptyList())
 
         val url = URL(
-            "https://stu.${region.url}/sts_sci_sf01_001.do" +
-                    "?schulCode=${code}" +
-                    "&schulCrseScCode=${type.id}" +
-                    "&schulKndScCode=0${type.id}" +
-                    "&ay=${year}" +
-                    "&mm=${String.format("%02d", month)}&"
+                "https://stu.${region.url}/sts_sci_sf01_001.do" +
+                        "?schulCode=${code}" +
+                        "&schulCrseScCode=${type.id}" +
+                        "&schulKndScCode=0${type.id}" +
+                        "&ay=${year}" +
+                        "&mm=${String.format("%02d", month)}&"
         )
 
-        var content = before(after(url.readText(), "<tbody>"), "</tbody>")
+        val content = before(after(url.readText(), "<tbody>"), "</tbody>")
 
         val monthlySchedule = ScheduleParser.parse(content)
         this.monthlyScheduleCache[cacheKey] = monthlySchedule

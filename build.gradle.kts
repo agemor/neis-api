@@ -9,7 +9,7 @@ val libraryName = "neis-api"
 // Artifact information (eg. kr.go.neis.api:neis-api:4.0.0)
 val publishedGroupId = "kr.go.neis.api"
 val artifact = "neis-api"
-val libraryVersion = "4.0.0"
+val libraryVersion = "4.0.1"
 
 val libraryDescription = "빠르고 가벼운 전국 초,중,고등학교 급식 식단표/학사일정 파서"
 val siteUrl = "https://github.com/agemor/neis-api"

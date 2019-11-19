@@ -12,9 +12,9 @@ object ScheduleParser {
     /**
      * 웹에서 가져온 데이터를 바탕으로 학사일정을 파싱합니다.
      */
-    fun parse(rawData: String): List<Schedule> {
+    fun parse(htmlText: String): List<Schedule> {
 
-        if (rawData.isEmpty())
+        if (htmlText.isEmpty())
             throw NEISException("불러온 데이터가 올바르지 않습니다.")
 
         val monthlySchedule = ArrayList<Schedule>()
@@ -23,7 +23,7 @@ object ScheduleParser {
          파싱 편의를 위해 모든 공백을 제거합니다.
          일정 텍스트에는 공백이 들어가지 않으므로, 파싱 결과에는 영향을 주지 않습니다.
          */
-        val chunk = rawData.replace("\\s+".toRegex(), "").split("textL\">".toRegex()).dropLastWhile { it.isEmpty() }
+        val chunk = htmlText.replace("\\s+".toRegex(), "").split("textL\">".toRegex()).dropLastWhile { it.isEmpty() }
             .toTypedArray()
 
         try {
