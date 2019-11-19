@@ -1,41 +1,41 @@
-group = "kr.go.neis.api"
-version = "4.0.0"
+    // Bintray repository
+    val bintrayRepo = "neis-api"
+    val bintrayName = "kr.go.neis.api"
+    val bintrayUser: String by project
+val bintrayKey: String by project
+    // Module name
+    val libraryName = "neis-api"
+
+    // Artifact information (eg. kr.go.neis.api:neis-api:4.0.0)
+    val publishedGroupId = "kr.go.neis.api"
+    val artifact = "neis-api"
+    val libraryVersion = "4.0.0"
+
+    val libraryDescription = "빠르고 가벼운 전국 초,중,고등학교 급식 식단표/학사일정 파서"
+    val siteUrl = "https://github.com/agemor/neis-api"
+    val gitUrl = "https://github.com/agemor/neis-api.git"
+    val developerId = "agemor"
+    val developerName = "HyunJun Kim"
+    val developerEmail = "hyunjun.leo.kim@gmail.com"
+    val licenseName = "The MIT License"
+    val licenseId = "MIT"
+    val licenseUrl = "https://opensource.org/licenses/MIT"
+
 
 plugins {
-
     kotlin("jvm") version "1.3.50"
-
-    id("org.jetbrains.dokka") version "0.9.17"
-    id("fr.coppernic.versioning") version "3.1.2"
     id("com.jfrog.bintray") version "1.8.4"
-
     `maven-publish`
 }
 
 repositories {
     jcenter()
-    mavenCentral()
 }
 
 dependencies {
     implementation(kotlin("stdlib")) 
 }
 
-tasks {
-    dokka {
-        outputFormat = "html"
-        outputDirectory = "$buildDir/javadoc"
-        moduleName = rootProject.name
-    }
-}
-
-val dokkaJar by tasks.creating(Jar::class) {
-    group = JavaBasePlugin.DOCUMENTATION_GROUP
-    description = "Assembles Kotlin docs with Dokka"
-    archiveClassifier.set("javadoc")
-    from(tasks.dokka)
-    dependsOn(tasks.dokka)
-}
 
 val sourcesJar by tasks.creating(Jar::class) {
     archiveClassifier.set("sources")
@@ -46,17 +46,34 @@ publishing {
     publications {
         create<MavenPublication>("lib") {
 
-            groupId = "neis-api"
-            artifactId = "kr.go.neis.api"
-            version = project.versioning.info.display
+            groupId = publishedGroupId
+            artifactId = artifact
+            version = libraryVersion
 
             from(components["java"])
-            artifact(dokkaJar)
             artifact(sourcesJar)
 
-            pom.withXml {
-                asNode().apply {
-                    appendNode("name", rootProject.name)
+            pom {
+                name.set(libraryName)
+                description.set(libraryDescription)
+                url.set(siteUrl)
+                licenses {
+                    license {
+                        name.set(licenseName)
+                        url.set(licenseUrl)
+                    }
+                }
+                developers {
+                    developer {
+                        id.set(developerId)
+                        name.set(developerName)
+                        email.set(developerEmail)
+                    }
+                }
+                scm {
+                    connection.set(gitUrl)
+                    developerConnection.set(gitUrl)
+                    url.set(siteUrl)
                 }
             }
 
@@ -66,8 +83,8 @@ publishing {
 
 bintray {
     // Getting bintray user and key from properties file or command line
-    user = if (project.hasProperty("bintray_user")) project.property("bintray_user") as String else ""
-    key = if (project.hasProperty("bintray_key")) project.property("bintray_key") as String else ""
+    user =  bintrayUser 
+    key = bintrayKey
 
     // Automatic publication enabled
     publish = true
@@ -77,16 +94,18 @@ bintray {
 
     // Configure package
     pkg.apply {
-        repo = "maven"
-        name = rootProject.name
-        setLicenses("MIT")
-        issueTrackerUrl = "https://github.com/agemor/neis-api/issues"
-        githubRepo = "https://github.com/agemor/neis-api"
+        repo = bintrayRepo
+        name = bintrayName
+        desc = libraryDescription
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        setLicenses(licenseId)
+        publish = true
+        publicDownloadNumbers = true
 
         // Configure version
         version.apply {
-            name = project.versioning.info.display
-            vcsTag = project.versioning.info.tag
+            name = libraryVersion
         }
     }
 }
