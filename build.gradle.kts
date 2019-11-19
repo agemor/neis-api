@@ -1,25 +1,25 @@
-    // Bintray repository
-    val bintrayRepo = "neis-api"
-    val bintrayName = "kr.go.neis.api"
-    val bintrayUser: String by project
+// Bintray repository
+val bintrayRepo = "neis-api"
+val bintrayName = "kr.go.neis.api"
+val bintrayUser: String by project
 val bintrayKey: String by project
-    // Module name
-    val libraryName = "neis-api"
+// Module name
+val libraryName = "neis-api"
 
-    // Artifact information (eg. kr.go.neis.api:neis-api:4.0.0)
-    val publishedGroupId = "kr.go.neis.api"
-    val artifact = "neis-api"
-    val libraryVersion = "4.0.0"
+// Artifact information (eg. kr.go.neis.api:neis-api:4.0.0)
+val publishedGroupId = "kr.go.neis.api"
+val artifact = "neis-api"
+val libraryVersion = "4.0.0"
 
-    val libraryDescription = "빠르고 가벼운 전국 초,중,고등학교 급식 식단표/학사일정 파서"
-    val siteUrl = "https://github.com/agemor/neis-api"
-    val gitUrl = "https://github.com/agemor/neis-api.git"
-    val developerId = "agemor"
-    val developerName = "HyunJun Kim"
-    val developerEmail = "hyunjun.leo.kim@gmail.com"
-    val licenseName = "The MIT License"
-    val licenseId = "MIT"
-    val licenseUrl = "https://opensource.org/licenses/MIT"
+val libraryDescription = "빠르고 가벼운 전국 초,중,고등학교 급식 식단표/학사일정 파서"
+val siteUrl = "https://github.com/agemor/neis-api"
+val gitUrl = "https://github.com/agemor/neis-api.git"
+val developerId = "agemor"
+val developerName = "HyunJun Kim"
+val developerEmail = "hyunjun.leo.kim@gmail.com"
+val licenseName = "The MIT License"
+val licenseId = "MIT"
+val licenseUrl = "https://opensource.org/licenses/MIT"
 
 
 plugins {
@@ -33,7 +33,7 @@ repositories {
 }
 
 dependencies {
-    implementation(kotlin("stdlib")) 
+    implementation(kotlin("stdlib"))
 }
 
 
@@ -83,7 +83,7 @@ publishing {
 
 bintray {
     // Getting bintray user and key from properties file or command line
-    user =  bintrayUser 
+    user = bintrayUser
     key = bintrayKey
 
     // Automatic publication enabled

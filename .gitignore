@@ -1,12 +1,12 @@
 # Private items
-gradle.properties
+    gradle.properties
 
-# Ignore Gradle project-specific cache directory
-.gradle
+    # Ignore Gradle project-specific cache directory
+    .gradle
 
-# Ignore Gradle build output directory
-build
+    # Ignore Gradle build output directory
+    build
 
-# IntelliJ
-.idea
-out/
+    # IntelliJ
+    .idea
+    out/
