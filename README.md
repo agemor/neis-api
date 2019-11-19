@@ -1,17 +1,22 @@
-# NEIS API
+# NEIS API 
+
 > 빠르고 가벼운 전국 초,중,고등학교 급식 식단표/학사일정 파서
 
-나이스(교육행정정보시스템) 학생서비스 페이지 파싱을 통해 월간 **학사일정**과 **급식 식단표**를 간편하게 불러올 수 있게 해 주는 API입니다. 한 번 로드된 데이터는 캐시하여 관리하고, 의존 라이브러리가 없어 9KB 정도의 적은 용량만을 차지하기 때문에 빠르고 가볍게 동작합니다.
+나이스(교육행정정보시스템) 학생서비스 페이지 파싱을 통해 월간 **학사일정**과 **급식 식단표**를 간편하게 불러올 수 있게 해 주는 API입니다. 한 번 로드된 데이터는 캐시하여 관리하고, 의존 라이브러리가 없어 7KB 정도의 적은 용량만을 차지하기 때문에 빠르고 가볍게 동작합니다.
 
 ## 설치하기
-최신 아카이브 파일을 다운로드하여 프로젝트에 추가하거나, 소스 코드를 프로젝트에 포함하여 설치합니다.
-
--  [neis-api-3.1.0.jar](https://github.com/agemor/neis-api/releases/download/3.1.0/neis-api-3.1.0.jar)
+`neis-api`는 [jcenter](https://bintray.com/agemor/neis-api/kr.go.neis.api)에 호스팅되어 있습니다.
+```groovy
+dependencies {
+    implementation "kr.go.neis.api:neis-api:4.0.1"
+}
+```
 
 ## 사용 예시
 
 #### 코드
 
+##### Kotlin
 ```kotlin
 val school = School.find(School.Region.SEOUL, "선덕고등학교")
 
@@ -22,6 +27,25 @@ println(menu[1].lunch)
 // 2018년 12월 5일 학사일정
 val schedule = school.getMonthlySchedule(2018, 12)
 println(schedule[4])
+```
+
+##### Java
+```java
+try {
+    School school = School.Companion.find(School.Region.SEOUL, "선덕고등학교");
+
+    List<Menu> menu = school.getMonthlyMenu(2019, 1);
+    List<Schedule> schedule = school.getMonthlySchedule(2018, 12);
+
+    // 2019년 1월 2일 점심 급식 식단표
+    System.out.println(menu.get(1).getLunch());
+
+    // 2018년 12월 5일 학사일정
+    System.out.println(schedule.get(4));
+
+} catch (NEISException e) {
+    e.printStackTrace();
+}
 ```
 
 #### 출력
@@ -45,7 +69,7 @@ NEIS API를 사용하기 위해 `School`인스턴스가 우선 생성되어야 �
 ```kotlin
 val school = School(/* 학교 종류 */, /* 관할 지역 */, /* 학교 코드 */)
 ```
-혹은 학교명으로 검색하여 자동 생성할 수도 있습니다. 이 방법은 학교 정보를 NEIS에서 검색하여 가져오므로 위의 방법보다 시간이 더 소요됩니다.
+수동으로 코드를 입력할 필요 없이 교육기관명으로 자동 검색하는 방법도 있습니다. 이 방법은 교육기관 정보를 NEIS에서 검색하여 가져오므로 위의 방법보다 시간이 조금 더 소요됩니다.
 ```kotlin
 val school = School.find(/* 관할 지역 */, /* 학교 이름 */)
 ```
@@ -83,7 +107,7 @@ val school = School.find(/* 관할 지역 */, /* 학교 이름 */)
 
 #### 학교 코드
 
-학교의 고유 코드는 [여기](https://code.schoolmenukr.ml/)에서 학교명으로 검색할 수 있습니다.
+학교의 고유 코드는 [여기](http://jubsoo2.bscu.ac.kr/src_gogocode/src_gogocode.asp)에서 학교명으로 검색할 수 있습니다.
  학교 코드는 `X000000000` 형식의 10자리 문자열입니다.
 
 ### 학사일정 불러오기
@@ -128,15 +152,6 @@ println(menu[29].lunch)
 
 ### 사용 시 주의사항
 NEIS API 내 모든 메서드들은 동기적(synchronous) IO를 사용합니다. 따라서 NEIS 서버에서 데이터를 로드하는 메서드 (`getMonthlyMenu`,`getMonthlySchedule`,`find`) 사용 시 스레드나 코루틴 등으로 병렬 처리를 해 주셔야 blocking 이 발생하지 않습니다.
-
-
-
-## 변경사항
-- 3.0.3 - 문제 상황에 알맞는 Exeption이 발생합니다.
-
-- 3.1.0 - 여러 일정이 불러와지지 않던 오류 수정과 캐시 기능, 학교 검색 기능 추가
-
-- 4.0.0 - Kotlin으로 마이그레이션
 
 ## 기여하기
 교육청 내부 URL 이동, HTML 구조 변경 등으로 파싱이 되지 않거나 에러가 발생할 수 있습니다. 이런 상황이 발생할 경우 이슈로 등록해 주시거나, 문제가 되는 부분을 수정하신 후 PR해 주시면 감사하겠습니다.
