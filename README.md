@@ -4,6 +4,11 @@
 
 나이스(교육행정정보시스템) 학생서비스 페이지 파싱을 통해 월간 **학사일정**과 **급식 식단표**를 간편하게 불러올 수 있게 해 주는 API입니다. 한 번 로드된 데이터는 캐시하여 관리하고, 의존 라이브러리가 없어 7KB 정도의 적은 용량만을 차지하기 때문에 빠르고 가볍게 동작합니다.
 
+## [중요]
+
+본 프로젝트는 NEIS에서 공식 API를 공개함에 따라 더 이상 관리되지 않습니다.
+NEIS 공식 API [https://open.neis.go.kr/](https://open.neis.go.kr/portal/mainPage.do) 를 사용하시길 바랍니다.
+
 ## 설치하기
 `neis-api`는 [jcenter](https://bintray.com/agemor/neis-api/kr.go.neis.api)에 호스팅되어 있습니다.
 ```groovy
